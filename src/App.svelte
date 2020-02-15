@@ -18,6 +18,10 @@
     { x: 4, y: 2 },
   ]
 
+  function areSameCoordinate(coordA, coordB) {
+    return coordA.x === coordB.x && coordA.y === coordB.y
+  }
+
   let apple_position = { x: 1, y: 1 }
   let is_growing_on_next_move = false
 
@@ -29,10 +33,7 @@
   let head_position
   $: head_position = snake_body[snake_body.length - 1]
 
-  $: if (
-    head_position.x === apple_position.x &&
-    head_position.y === apple_position.y
-  ) {
+  $: if (areSameCoordinate(head_position, apple_position)) {
     eatApple()
   }
 
@@ -88,11 +89,28 @@
     is_growing_on_next_move = new_is_growing
   }
 
-  function getNewApplePosition() {}
+  function randomPick(array) {
+    return array[Math.floor(Math.random() * array.length)]
+  }
+
+  function getNewApplePosition() {
+    const board_spaces = [...Array(board_dimensions.x).keys()].flatMap(x =>
+      [...Array(board_dimensions.y).keys()].map(y => ({ x, y })),
+    )
+    const open_spaces = board_spaces.filter(
+      board_space =>
+        !snake_body.some(snake_space =>
+          areSameCoordinate(snake_space, board_space),
+        ),
+    )
+
+    return randomPick(open_spaces)
+  }
 
   function eatApple() {
     score = score + 1
     is_growing_on_next_move = true
+    apple_position = getNewApplePosition()
 
     // TODO 2020-02-15 (Eirik V.): increment score and select new apple
   }
