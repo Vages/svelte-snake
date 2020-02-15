@@ -2,20 +2,14 @@
   import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
 
-  import {
-    addCoordinates,
-    areSameCoordinate,
-    DIRECTIONS,
-    isInsideBoard,
-    randomPick,
-  } from "./utils"
+  import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
   let gameOver = false
   let score = 0
-  const MILLISECONDS_BEFORE_MOVING = 100
 
+  const TICK_TIME = 100
   const CELL_SIZE = 25
-  let boardDimensions = { x: 40, y: 30 }
+  const BOARD_DIMENSIONS = { x: 40, y: 30 }
 
   let snakeBody = [
     { x: 4, y: 2 },
@@ -29,31 +23,29 @@
 
   $: gameOver =
     gameOver ||
-    !isInsideBoard(boardDimensions, headPosition) ||
+    !isInsideBoard(BOARD_DIMENSIONS, headPosition) ||
     snakeBody
       .slice(0, snakeBody.length - 1)
-      .some(snakeSpace => areSameCoordinate(snakeSpace, headPosition))
+      .some(snakeSpace => isEqual(snakeSpace, headPosition))
 
   let applePosition = { x: 1, y: 1 }
-  $: if (areSameCoordinate(headPosition, applePosition)) {
+  $: if (isEqual(headPosition, applePosition)) {
     eatApple()
   }
 
   function eatApple() {
     score += 1
     isGrowingOnNextMove = true
-    applePosition = getNewApplePosition()
+    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snakeBody)
   }
 
-  function getNewApplePosition() {
+  function getNewApplePosition(boardDimensions, snakeCoordinates) {
     const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
       [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
     )
     const openSpaces = boardSpaces.filter(
       boardSpace =>
-        !snakeBody.some(snakeSpace =>
-          areSameCoordinate(snakeSpace, boardSpace),
-        ),
+        !snakeCoordinates.some(snakeSpace => isEqual(snakeSpace, boardSpace)),
     )
 
     return randomPick(openSpaces)
@@ -61,7 +53,7 @@
 
   function getNextSnakeBody(theBody, direction, shouldGrow) {
     const headCoordinate = theBody[snakeBody.length - 1]
-    const nextHead = addCoordinates(headCoordinate, direction)
+    const nextHead = add(headCoordinate, direction)
     const withAddedHead = [...theBody, nextHead]
 
     return shouldGrow ? withAddedHead : withAddedHead.slice(1)
@@ -87,9 +79,9 @@
 
     const neckPosition = snakeBody[snakeBody.length - 2]
 
-    const is180Turn = areSameCoordinate(
+    const is180Turn = isEqual(
       neckPosition,
-      addCoordinates(headPosition, DIRECTIONS[newDirectionFromEventKey]),
+      add(headPosition, DIRECTIONS[newDirectionFromEventKey]),
     )
 
     if (!is180Turn) {
@@ -109,7 +101,7 @@
   let stopMovement = () => {}
 
   const startMovement = () => {
-    const id = setInterval(moveSnake, MILLISECONDS_BEFORE_MOVING)
+    const id = setInterval(moveSnake, TICK_TIME)
     stopMovement = () => clearInterval(id)
     return () => clearInterval(id)
   }
@@ -162,7 +154,7 @@
 <div
   use:cssVars={styleVars}
   class="board"
-  style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
+  style="width: {BOARD_DIMENSIONS.x * CELL_SIZE}px; height: {BOARD_DIMENSIONS.y * CELL_SIZE}px">
 
   {#each snakeBody as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />

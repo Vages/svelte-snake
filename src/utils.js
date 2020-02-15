@@ -1,4 +1,4 @@
-export function areSameCoordinate(coordA, coordB) {
+export function isEqual(coordA, coordB) {
   return coordA.x === coordB.x && coordA.y === coordB.y
 }
 
@@ -11,7 +11,7 @@ export function isInsideBoard(boardDimensions, coordinate) {
   )
 }
 
-export function addCoordinates(coordA, coordB) {
+export function add(coordA, coordB) {
   return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
 }
 
