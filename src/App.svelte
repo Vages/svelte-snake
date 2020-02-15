@@ -2,16 +2,19 @@
   import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
 
+  import {
+    addCoordinates,
+    areSameCoordinate,
+    DIRECTIONS,
+    isInsideBoard,
+    randomPick,
+  } from "./utils"
+
   const CELL_SIZE = 25
   const MILLISECONDS_BEFORE_MOVING = 100
-  let score = 0
+  let boardDimensions = { x: 40, y: 30 }
 
-  const DIRECTIONS = Object.freeze({
-    NORTH: { x: 0, y: -1 },
-    SOUTH: { x: 0, y: 1 },
-    EAST: { x: 1, y: 0 },
-    WEST: { x: -1, y: 0 },
-  })
+  let score = 0
 
   let snakeBody = [
     { x: 4, y: 2 },
@@ -19,14 +22,9 @@
     { x: 4, y: 4 },
   ]
 
-  function areSameCoordinate(coordA, coordB) {
-    return coordA.x === coordB.x && coordA.y === coordB.y
-  }
-
   let applePosition = { x: 1, y: 1 }
-  let isGrowingOnNextMove = false
 
-  let boardDimensions = { x: 40, y: 30 }
+  let isGrowingOnNextMove = false
 
   let headDirectionAsWords = "SOUTH"
   let headDirectionCoordinate
@@ -36,19 +34,10 @@
   let gameOver = false
   $: gameOver =
     gameOver ||
-    !isInsideBoard(headPosition) ||
+    !isInsideBoard(boardDimensions, headPosition) ||
     snakeBody
       .slice(0, snakeBody.length - 1)
       .some(snakeSpace => areSameCoordinate(snakeSpace, headPosition))
-
-  function isInsideBoard(coordinate) {
-    return (
-      coordinate.x >= 0 &&
-      coordinate.x < boardDimensions.x &&
-      coordinate.y >= 0 &&
-      coordinate.y < boardDimensions.y
-    )
-  }
 
   $: if (areSameCoordinate(headPosition, applePosition)) {
     eatApple()
@@ -57,10 +46,6 @@
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
       CELL_SIZE}px`
-  }
-
-  function addCoordinates(coordA, coordB) {
-    return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
   }
 
   function getNextSnakeBody(theBody, direction, shouldGrow) {
@@ -108,10 +93,6 @@
       isGrowingOnNextMove,
     )
     isGrowingOnNextMove = false
-  }
-
-  function randomPick(array) {
-    return array[Math.floor(Math.random() * array.length)]
   }
 
   function getNewApplePosition() {
