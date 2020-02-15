@@ -32,6 +32,17 @@
   $: head_direction_coordinate = DIRECTIONS[head_direction_as_words]
   let head_position
   $: head_position = snake_body[snake_body.length - 1]
+  let gameOver
+  $: gameOver = !isInsideBoard(head_position)
+
+  function isInsideBoard(coordinate) {
+    return (
+      coordinate.x >= 0 &&
+      coordinate.x < board_dimensions.x &&
+      coordinate.y >= 0 &&
+      coordinate.y < board_dimensions.x
+    )
+  }
 
   $: if (areSameCoordinate(head_position, apple_position)) {
     eatApple()
@@ -162,4 +173,6 @@
 </div>
 
 <div>Head direction: {head_direction_as_words}</div>
-<score>Score: {score}</score>
+<div>Head position: {JSON.stringify(head_position)}</div>
+<div>Score: {score}</div>
+<div>Game over: {gameOver}</div>
