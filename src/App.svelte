@@ -1,4 +1,6 @@
 <script>
+  import cssVars from "svelte-css-vars"
+
   const CELL_SIZE = 60
 
   let snake_body = [
@@ -15,6 +17,11 @@
   let apple_position = { x: 1, y: 1 }
 
   let board_dimensions = { x: 5, y: 5 }
+
+  let styleVars
+  $: styleVars = {
+    "cell-size": `${CELL_SIZE}px`
+  }
   // TODO 2020-02-15 (Eirik V.): Use https://github.com/kaisermann/svelte-css-vars
 </script>
 
@@ -22,8 +29,8 @@
   .body-part,
   .apple {
     position: absolute;
-    width: 60px;
-    height: 60px;
+    width: var(--cell-size);
+    height: var(--cell-size);
     text-align: center;
   }
 
@@ -41,6 +48,7 @@
 </style>
 
 <div
+  use:cssVars={styleVars}
   class="board"
   style="width: {board_dimensions.x * CELL_SIZE}px; height: {board_dimensions.y * CELL_SIZE}px">
 

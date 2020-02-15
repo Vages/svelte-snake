@@ -2105,6 +2105,11 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
+svelte-css-vars@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/svelte-css-vars/-/svelte-css-vars-0.0.1.tgz#f0775a02952476a47e99ea866e64ba8d2353b9e0"
+  integrity sha512-SXsLuHvpC40H14iCRH8zp/NnY/tKGhQhmHSx31PhUNvo+Hyw7IovTnx4ICsYlg4tS7kFsYtOh5sNSdvGsY6AQA==
+
 svelte@^3.0.0:
   version "3.18.2"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.18.2.tgz#f136b9e169049f8bb6a364bd8b8f3b619ed957d9"
