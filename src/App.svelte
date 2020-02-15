@@ -10,28 +10,23 @@
     randomPick,
   } from "./utils"
 
-  const CELL_SIZE = 25
-  const MILLISECONDS_BEFORE_MOVING = 100
-  let boardDimensions = { x: 40, y: 30 }
-
+  let gameOver = false
   let score = 0
+  const MILLISECONDS_BEFORE_MOVING = 100
+
+  const CELL_SIZE = 25
+  let boardDimensions = { x: 40, y: 30 }
 
   let snakeBody = [
     { x: 4, y: 2 },
     { x: 4, y: 3 },
     { x: 4, y: 4 },
   ]
-
-  let applePosition = { x: 1, y: 1 }
-
-  let isGrowingOnNextMove = false
-
   let headDirectionAsWords = "SOUTH"
-  let headDirectionCoordinate
-  $: headDirectionCoordinate = DIRECTIONS[headDirectionAsWords]
+  let isGrowingOnNextMove = false
   let headPosition
   $: headPosition = snakeBody[snakeBody.length - 1]
-  let gameOver = false
+
   $: gameOver =
     gameOver ||
     !isInsideBoard(boardDimensions, headPosition) ||
@@ -39,13 +34,29 @@
       .slice(0, snakeBody.length - 1)
       .some(snakeSpace => areSameCoordinate(snakeSpace, headPosition))
 
+  let applePosition = { x: 1, y: 1 }
   $: if (areSameCoordinate(headPosition, applePosition)) {
     eatApple()
   }
 
-  function calculatePositionAsStyle(coordinate) {
-    return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
-      CELL_SIZE}px`
+  function eatApple() {
+    score += 1
+    isGrowingOnNextMove = true
+    applePosition = getNewApplePosition()
+  }
+
+  function getNewApplePosition() {
+    const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
+      [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
+    )
+    const openSpaces = boardSpaces.filter(
+      boardSpace =>
+        !snakeBody.some(snakeSpace =>
+          areSameCoordinate(snakeSpace, boardSpace),
+        ),
+    )
+
+    return randomPick(openSpaces)
   }
 
   function getNextSnakeBody(theBody, direction, shouldGrow) {
@@ -74,8 +85,8 @@
   async function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    // TODO 2020-02-15 (Eirik V.): Calculate this from neck instead of previous direction
     const neckPosition = snakeBody[snakeBody.length - 2]
+
     const is180Turn = areSameCoordinate(
       neckPosition,
       addCoordinates(headPosition, DIRECTIONS[newDirectionFromEventKey]),
@@ -89,44 +100,29 @@
   async function moveSnake() {
     snakeBody = getNextSnakeBody(
       snakeBody,
-      headDirectionCoordinate,
+      DIRECTIONS[headDirectionAsWords],
       isGrowingOnNextMove,
     )
     isGrowingOnNextMove = false
   }
 
-  function getNewApplePosition() {
-    const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
-      [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
-    )
-    const openSpaces = boardSpaces.filter(
-      boardSpace =>
-        !snakeBody.some(snakeSpace =>
-          areSameCoordinate(snakeSpace, boardSpace),
-        ),
-    )
-
-    return randomPick(openSpaces)
-  }
-
-  function eatApple() {
-    score += 1
-    isGrowingOnNextMove = true
-    applePosition = getNewApplePosition()
-
-    // TODO 2020-02-15 (Eirik V.): increment score and select new apple
-  }
-
   let stopMovement = () => {}
 
-  onMount(() => {
+  const startMovement = () => {
     const id = setInterval(moveSnake, MILLISECONDS_BEFORE_MOVING)
     stopMovement = () => clearInterval(id)
     return () => clearInterval(id)
-  })
+  }
 
   $: if (gameOver) {
     stopMovement()
+  }
+
+  onMount(startMovement)
+
+  function calculatePositionAsStyle(coordinate) {
+    return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
+      CELL_SIZE}px`
   }
 
   let styleVars
