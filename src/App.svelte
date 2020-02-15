@@ -22,7 +22,6 @@
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
   }
-  // TODO 2020-02-15 (Eirik V.): Use https://github.com/kaisermann/svelte-css-vars
 </script>
 
 <style>
