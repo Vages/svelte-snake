@@ -3,6 +3,7 @@
   import cssVars from "svelte-css-vars"
 
   const CELL_SIZE = 60
+  let score = 0
 
   const DIRECTIONS = Object.freeze({
     NORTH: { x: 0, y: -1 },
@@ -17,22 +18,41 @@
     { x: 4, y: 2 },
   ]
 
+  let apple_position = { x: 1, y: 1 }
+  let is_growing_on_next_move = false
+
+  let board_dimensions = { x: 5, y: 5 }
+
   let head_direction_as_words = "WEST"
   let head_direction_coordinate
   $: head_direction_coordinate = DIRECTIONS[head_direction_as_words]
+  let head_position
+  $: head_position = snake_body[snake_body.length - 1]
+
+  $: if (
+    head_position.x === apple_position.x &&
+    head_position.y === apple_position.y
+  ) {
+    eatApple()
+  }
 
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
       CELL_SIZE}px`
   }
 
-  function getNextSnakeBody(the_body, direction) {
+  function getNextSnakeBody(the_body, direction, shouldGrow) {
     const head_coordinate = the_body[snake_body.length - 1]
     const next_head = {
       x: head_coordinate.x + direction.x,
       y: head_coordinate.y + direction.y,
     }
-    return [...the_body.slice(1), next_head]
+    let withAddedHead = [...the_body, next_head]
+
+    return {
+      new_body: shouldGrow ? withAddedHead : withAddedHead.slice(1),
+      new_growing: false,
+    }
   }
 
   function getNewDirectionFromEventKey(key) {
@@ -58,16 +78,24 @@
   }
 
   function moveSnake() {
-    snake_body = getNextSnakeBody(snake_body, head_direction_coordinate)
+    const { new_body, new_is_growing } = getNextSnakeBody(
+      snake_body,
+      head_direction_coordinate,
+      is_growing_on_next_move,
+    )
+
+    snake_body = new_body
+    is_growing_on_next_move = new_is_growing
   }
+
+  function getNewApplePosition() {}
 
   function eatApple() {
+    score = score + 1
+    is_growing_on_next_move = true
+
     // TODO 2020-02-15 (Eirik V.): increment score and select new apple
   }
-
-  let apple_position = { x: 1, y: 1 }
-
-  let board_dimensions = { x: 5, y: 5 }
 
   let styleVars
   $: styleVars = {
@@ -116,3 +144,4 @@
 </div>
 
 <div>Head direction: {head_direction_as_words}</div>
+<score>Score: {score}</score>
