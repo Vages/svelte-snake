@@ -95,7 +95,10 @@
   async function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    if (newDirectionFromEventKey !== OPPOSITES[headDirectionAsWords]) {
+    // TODO 2020-02-15 (Eirik V.): Calculate this from neck instead of previous direction
+    const is180Turn =
+      newDirectionFromEventKey === OPPOSITES[headDirectionAsWords]
+    if (!is180Turn) {
       headDirectionAsWords = newDirectionFromEventKey
     }
   }
