@@ -1,4 +1,5 @@
 <script>
+  import { tick } from "svelte"
   import cssVars from "svelte-css-vars"
 
   const CELL_SIZE = 60
@@ -16,7 +17,9 @@
     { x: 4, y: 2 },
   ]
 
-  let head_direction = DIRECTIONS.WEST
+  let head_direction_as_words = "WEST"
+  let head_direction_coordinate
+  $: head_direction_coordinate = DIRECTIONS[head_direction_as_words]
 
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
@@ -32,8 +35,34 @@
     return [...the_body.slice(1), next_head]
   }
 
+  function getNewDirectionFromEventKey(key) {
+    switch (key) {
+      case "ArrowUp":
+        return "NORTH"
+      case "ArrowDown":
+        return "SOUTH"
+      case "ArrowLeft":
+        return "WEST"
+      case "ArrowRight":
+        return "EAST"
+      default:
+        return head_direction_as_words
+    }
+  }
+
+  async function handleKeydown(event) {
+    head_direction_as_words = getNewDirectionFromEventKey(event.key)
+    // TODO 2020-02-15 (Eirik V.): Make a task that
+    await tick()
+    moveSnake()
+  }
+
   function moveSnake() {
-    snake_body = getNextSnakeBody(snake_body, head_direction)
+    snake_body = getNextSnakeBody(snake_body, head_direction_coordinate)
+  }
+
+  function eatApple() {
+    // TODO 2020-02-15 (Eirik V.): increment score and select new apple
   }
 
   let apple_position = { x: 1, y: 1 }
@@ -64,9 +93,15 @@
   }
 
   .board {
+    position: relative;
+    margin: 10rem;
     outline: 10px solid black;
   }
 </style>
+
+<svelte:options immutable={true} />
+
+<svelte:body on:keydown={handleKeydown} />
 
 <div
   use:cssVars={styleVars}
@@ -79,4 +114,5 @@
 
   <div style={calculatePositionAsStyle(apple_position)} class="apple">🍎</div>
 </div>
-<button on:click={moveSnake}>Go One Step</button>
+
+<div>Head direction: {head_direction_as_words}</div>
