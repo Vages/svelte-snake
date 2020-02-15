@@ -3,15 +3,37 @@
 
   const CELL_SIZE = 60
 
+  const DIRECTIONS = Object.freeze({
+    NORTH: { x: 0, y: -1 },
+    SOUTH: { x: 0, y: 1 },
+    EAST: { x: 1, y: 0 },
+    WEST: { x: -1, y: 0 },
+  })
+
   let snake_body = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
     { x: 4, y: 2 },
   ]
 
+  let head_direction = DIRECTIONS.WEST
+
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
       CELL_SIZE}px`
+  }
+
+  function getNextSnakeBody(the_body, direction) {
+    const head_coordinate = the_body[snake_body.length - 1]
+    const next_head = {
+      x: head_coordinate.x + direction.x,
+      y: head_coordinate.y + direction.y,
+    }
+    return [...the_body.slice(1), next_head]
+  }
+
+  function moveSnake() {
+    snake_body = getNextSnakeBody(snake_body, head_direction)
   }
 
   let apple_position = { x: 1, y: 1 }
@@ -57,3 +79,4 @@
 
   <div style={calculatePositionAsStyle(apple_position)} class="apple">🍎</div>
 </div>
+<button on:click={moveSnake}>Go One Step</button>
