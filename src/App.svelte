@@ -12,6 +12,13 @@
     WEST: { x: -1, y: 0 },
   })
 
+  const OPPOSITES = Object.freeze(
+    Object.entries({ NORTH: "SOUTH", EAST: "WEST" }).reduce(
+      (accumulator, [k, v]) => ({ ...accumulator, [k]: v, [v]: k }),
+      {},
+    ),
+  )
+
   let snake_body = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
@@ -88,11 +95,13 @@
   }
 
   async function handleKeydown(event) {
-    // TODO 2020-02-15 (Eirik V.): Don't assign if it's the opposite
-    head_direction_as_words = getNewDirectionFromEventKey(event.key)
-    // TODO 2020-02-15 (Eirik V.): Make a task that
-    await tick()
-    moveSnake()
+    const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
+
+    if (newDirectionFromEventKey !== OPPOSITES[head_direction_as_words]) {
+      head_direction_as_words = newDirectionFromEventKey
+      await tick() // This should be a task
+      moveSnake()
+    }
   }
 
   function moveSnake() {
