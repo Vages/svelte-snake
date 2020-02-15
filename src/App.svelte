@@ -19,7 +19,7 @@
     ),
   )
 
-  let snake_body = [
+  let snakeBody = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
     { x: 4, y: 2 },
@@ -29,34 +29,34 @@
     return coordA.x === coordB.x && coordA.y === coordB.y
   }
 
-  let apple_position = { x: 1, y: 1 }
-  let is_growing_on_next_move = false
+  let applePosition = { x: 1, y: 1 }
+  let isGrowingOnNextMove = false
 
-  let board_dimensions = { x: 5, y: 5 }
+  let boardDimensions = { x: 5, y: 5 }
 
-  let head_direction_as_words = "WEST"
-  let head_direction_coordinate
-  $: head_direction_coordinate = DIRECTIONS[head_direction_as_words]
-  let head_position
-  $: head_position = snake_body[snake_body.length - 1]
-  let gameOver
+  let headDirectionAsWords = "WEST"
+  let headDirectionCoordinate
+  $: headDirectionCoordinate = DIRECTIONS[headDirectionAsWords]
+  let headPosition
+  $: headPosition = snakeBody[snakeBody.length - 1]
+  let gameOver = false
   $: gameOver =
     gameOver ||
-    !isInsideBoard(head_position) ||
-    snake_body
-      .slice(0, snake_body.length - 1)
-      .some(snake_space => areSameCoordinate(snake_space, head_position))
+    !isInsideBoard(headPosition) ||
+    snakeBody
+      .slice(0, snakeBody.length - 1)
+      .some(snakeSpace => areSameCoordinate(snakeSpace, headPosition))
 
   function isInsideBoard(coordinate) {
     return (
       coordinate.x >= 0 &&
-      coordinate.x < board_dimensions.x &&
+      coordinate.x < boardDimensions.x &&
       coordinate.y >= 0 &&
-      coordinate.y < board_dimensions.x
+      coordinate.y < boardDimensions.x
     )
   }
 
-  $: if (areSameCoordinate(head_position, apple_position)) {
+  $: if (areSameCoordinate(headPosition, applePosition)) {
     eatApple()
   }
 
@@ -65,18 +65,15 @@
       CELL_SIZE}px`
   }
 
-  function getNextSnakeBody(the_body, direction, shouldGrow) {
-    const head_coordinate = the_body[snake_body.length - 1]
-    const next_head = {
-      x: head_coordinate.x + direction.x,
-      y: head_coordinate.y + direction.y,
+  function getNextSnakeBody(theBody, direction, shouldGrow) {
+    const headCoordinate = theBody[snakeBody.length - 1]
+    const nextHead = {
+      x: headCoordinate.x + direction.x,
+      y: headCoordinate.y + direction.y,
     }
-    let withAddedHead = [...the_body, next_head]
+    const withAddedHead = [...theBody, nextHead]
 
-    return {
-      new_body: shouldGrow ? withAddedHead : withAddedHead.slice(1),
-      new_growing: false,
-    }
+    return shouldGrow ? withAddedHead : withAddedHead.slice(1)
   }
 
   function getNewDirectionFromEventKey(key) {
@@ -90,29 +87,27 @@
       case "ArrowRight":
         return "EAST"
       default:
-        return head_direction_as_words
+        return headDirectionAsWords
     }
   }
 
   async function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    if (newDirectionFromEventKey !== OPPOSITES[head_direction_as_words]) {
-      head_direction_as_words = newDirectionFromEventKey
+    if (newDirectionFromEventKey !== OPPOSITES[headDirectionAsWords]) {
+      headDirectionAsWords = newDirectionFromEventKey
       await tick() // This should be a task
       moveSnake()
     }
   }
 
   function moveSnake() {
-    const { new_body, new_is_growing } = getNextSnakeBody(
-      snake_body,
-      head_direction_coordinate,
-      is_growing_on_next_move,
+    snakeBody = getNextSnakeBody(
+      snakeBody,
+      headDirectionCoordinate,
+      isGrowingOnNextMove,
     )
-
-    snake_body = new_body
-    is_growing_on_next_move = new_is_growing
+    isGrowingOnNextMove = false
   }
 
   function randomPick(array) {
@@ -120,23 +115,23 @@
   }
 
   function getNewApplePosition() {
-    const board_spaces = [...Array(board_dimensions.x).keys()].flatMap(x =>
-      [...Array(board_dimensions.y).keys()].map(y => ({ x, y })),
+    const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
+      [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
     )
-    const open_spaces = board_spaces.filter(
-      board_space =>
-        !snake_body.some(snake_space =>
-          areSameCoordinate(snake_space, board_space),
+    const openSpaces = boardSpaces.filter(
+      boardSpace =>
+        !snakeBody.some(snakeSpace =>
+          areSameCoordinate(snakeSpace, boardSpace),
         ),
     )
 
-    return randomPick(open_spaces)
+    return randomPick(openSpaces)
   }
 
   function eatApple() {
     score = score + 1
-    is_growing_on_next_move = true
-    apple_position = getNewApplePosition()
+    isGrowingOnNextMove = true
+    applePosition = getNewApplePosition()
 
     // TODO 2020-02-15 (Eirik V.): increment score and select new apple
   }
@@ -178,16 +173,16 @@
 <div
   use:cssVars={styleVars}
   class="board"
-  style="width: {board_dimensions.x * CELL_SIZE}px; height: {board_dimensions.y * CELL_SIZE}px">
+  style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
-  {#each snake_body as body_part}
-    <div class="body-part" style={calculatePositionAsStyle(body_part)} />
+  {#each snakeBody as bodyPart}
+    <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
 
-  <div style={calculatePositionAsStyle(apple_position)} class="apple">🍎</div>
+  <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
 
-<div>Head direction: {head_direction_as_words}</div>
-<div>Head position: {JSON.stringify(head_position)}</div>
+<div>Head direction: {headDirectionAsWords}</div>
+<div>Head position: {JSON.stringify(headPosition)}</div>
 <div>Score: {score}</div>
 <div>Game over: {gameOver}</div>
