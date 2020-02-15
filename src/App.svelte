@@ -6,7 +6,7 @@
   let snake_body = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
-    { x: 4, y: 2 }
+    { x: 4, y: 2 },
   ]
 
   function calculatePositionAsStyle(coordinate) {
@@ -20,7 +20,7 @@
 
   let styleVars
   $: styleVars = {
-    "cell-size": `${CELL_SIZE}px`
+    "cell-size": `${CELL_SIZE}px`,
   }
   // TODO 2020-02-15 (Eirik V.): Use https://github.com/kaisermann/svelte-css-vars
 </script>
