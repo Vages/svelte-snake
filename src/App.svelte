@@ -4,38 +4,61 @@
 
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
-  let gameOver = false
-  let score = 0
-
   const TICK_TIME = 100
   const CELL_SIZE = 25
   const BOARD_DIMENSIONS = { x: 40, y: 30 }
 
+  let gameOver = false
+  let score = 0
   let snakeBody = [
     { x: 4, y: 2 },
     { x: 4, y: 3 },
     { x: 4, y: 4 },
   ]
-  let headDirectionAsWords = "SOUTH"
-  let isGrowingOnNextMove = false
-  let headPosition
-  $: headPosition = snakeBody[snakeBody.length - 1]
+  let headDirection = "SOUTH"
+  let willGrow = false
+  let applePosition = { x: 1, y: 1 }
 
+  let headPosition
+
+  $: headPosition = snakeBody[snakeBody.length - 1]
   $: gameOver =
     gameOver ||
     !isInsideBoard(BOARD_DIMENSIONS, headPosition) ||
     snakeBody
       .slice(0, snakeBody.length - 1)
       .some(snakeSpace => isEqual(snakeSpace, headPosition))
-
-  let applePosition = { x: 1, y: 1 }
   $: if (isEqual(headPosition, applePosition)) {
     eatApple()
   }
 
+  let stopTicking = () => {}
+  const startTicking = () => {
+    const id = setInterval(moveSnake, TICK_TIME)
+    stopTicking = () => clearInterval(id)
+    return () => clearInterval(id)
+  }
+  onMount(startTicking)
+  $: if (gameOver) {
+    stopTicking()
+  }
+
+  async function moveSnake() {
+    snakeBody = getNextSnakeBody(snakeBody, DIRECTIONS[headDirection], willGrow)
+    willGrow = false
+  }
+
+  function getNextSnakeBody(theBody, direction, shouldGrow) {
+    const headCoordinate = theBody[snakeBody.length - 1]
+    const nextHead = add(headCoordinate, direction)
+    const withAddedHead = [...theBody, nextHead]
+
+    return shouldGrow ? withAddedHead : withAddedHead.slice(1)
+  }
+
   function eatApple() {
     score += 1
-    isGrowingOnNextMove = true
+    willGrow = true
     applePosition = getNewApplePosition(BOARD_DIMENSIONS, snakeBody)
   }
 
@@ -51,12 +74,19 @@
     return randomPick(openSpaces)
   }
 
-  function getNextSnakeBody(theBody, direction, shouldGrow) {
-    const headCoordinate = theBody[snakeBody.length - 1]
-    const nextHead = add(headCoordinate, direction)
-    const withAddedHead = [...theBody, nextHead]
+  async function handleKeydown(event) {
+    const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    return shouldGrow ? withAddedHead : withAddedHead.slice(1)
+    const neckPosition = snakeBody[snakeBody.length - 2]
+
+    const is180Turn = isEqual(
+      neckPosition,
+      add(headPosition, DIRECTIONS[newDirectionFromEventKey]),
+    )
+
+    if (!is180Turn) {
+      headDirection = newDirectionFromEventKey
+    }
   }
 
   function getNewDirectionFromEventKey(key) {
@@ -70,47 +100,9 @@
       case "ArrowRight":
         return "EAST"
       default:
-        return headDirectionAsWords
+        return headDirection
     }
   }
-
-  async function handleKeydown(event) {
-    const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
-
-    const neckPosition = snakeBody[snakeBody.length - 2]
-
-    const is180Turn = isEqual(
-      neckPosition,
-      add(headPosition, DIRECTIONS[newDirectionFromEventKey]),
-    )
-
-    if (!is180Turn) {
-      headDirectionAsWords = newDirectionFromEventKey
-    }
-  }
-
-  async function moveSnake() {
-    snakeBody = getNextSnakeBody(
-      snakeBody,
-      DIRECTIONS[headDirectionAsWords],
-      isGrowingOnNextMove,
-    )
-    isGrowingOnNextMove = false
-  }
-
-  let stopMovement = () => {}
-
-  const startMovement = () => {
-    const id = setInterval(moveSnake, TICK_TIME)
-    stopMovement = () => clearInterval(id)
-    return () => clearInterval(id)
-  }
-
-  $: if (gameOver) {
-    stopMovement()
-  }
-
-  onMount(startMovement)
 
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
@@ -163,7 +155,7 @@
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
 
-<div>Head direction: {headDirectionAsWords}</div>
+<div>Head direction: {headDirection}</div>
 <div>Head position: {JSON.stringify(headPosition)}</div>
 <div>Score: {score}</div>
 <div>Game over: {gameOver}</div>
