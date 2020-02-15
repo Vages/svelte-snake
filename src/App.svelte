@@ -1,8 +1,9 @@
 <script>
-  import { tick } from "svelte"
+  import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
 
   const CELL_SIZE = 25
+  const MILLISECONDS_BEFORE_MOVING = 100
   let score = 0
 
   const DIRECTIONS = Object.freeze({
@@ -20,9 +21,9 @@
   )
 
   let snakeBody = [
-    { x: 4, y: 4 },
-    { x: 4, y: 3 },
     { x: 4, y: 2 },
+    { x: 4, y: 3 },
+    { x: 4, y: 4 },
   ]
 
   function areSameCoordinate(coordA, coordB) {
@@ -34,7 +35,7 @@
 
   let boardDimensions = { x: 40, y: 30 }
 
-  let headDirectionAsWords = "WEST"
+  let headDirectionAsWords = "SOUTH"
   let headDirectionCoordinate
   $: headDirectionCoordinate = DIRECTIONS[headDirectionAsWords]
   let headPosition
@@ -52,7 +53,7 @@
       coordinate.x >= 0 &&
       coordinate.x < boardDimensions.x &&
       coordinate.y >= 0 &&
-      coordinate.y < boardDimensions.x
+      coordinate.y < boardDimensions.y
     )
   }
 
@@ -96,12 +97,10 @@
 
     if (newDirectionFromEventKey !== OPPOSITES[headDirectionAsWords]) {
       headDirectionAsWords = newDirectionFromEventKey
-      await tick() // This should be a task
-      moveSnake()
     }
   }
 
-  function moveSnake() {
+  async function moveSnake() {
     snakeBody = getNextSnakeBody(
       snakeBody,
       headDirectionCoordinate,
@@ -134,6 +133,18 @@
     applePosition = getNewApplePosition()
 
     // TODO 2020-02-15 (Eirik V.): increment score and select new apple
+  }
+
+  let stopMovement
+
+  onMount(() => {
+    const id = setInterval(moveSnake, MILLISECONDS_BEFORE_MOVING)
+    stopMovement = () => clearInterval(id)
+    return () => clearInterval(id)
+  })
+
+  $: if (gameOver) {
+    stopMovement()
   }
 
   let styleVars
