@@ -2,7 +2,7 @@
   import { tick } from "svelte"
   import cssVars from "svelte-css-vars"
 
-  const CELL_SIZE = 60
+  const CELL_SIZE = 25
   let score = 0
 
   const DIRECTIONS = Object.freeze({
@@ -32,7 +32,7 @@
   let applePosition = { x: 1, y: 1 }
   let isGrowingOnNextMove = false
 
-  let boardDimensions = { x: 5, y: 5 }
+  let boardDimensions = { x: 40, y: 30 }
 
   let headDirectionAsWords = "WEST"
   let headDirectionCoordinate
@@ -156,12 +156,12 @@
   }
 
   .apple {
-    font-size: 48px;
+    font-size: calc(var(--cell-size) * 0.8);
   }
 
   .board {
     position: relative;
-    margin: 10rem;
+    margin: 1rem;
     outline: 10px solid black;
   }
 </style>
