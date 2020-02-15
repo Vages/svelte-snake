@@ -4,10 +4,12 @@
 
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
+  // Configuration
   const TICK_TIME = 100
   const CELL_SIZE = 25
   const BOARD_DIMENSIONS = { x: 40, y: 30 }
 
+  // Game state
   let gameOver = false
   let score = 0
   let snakeBody = [
@@ -20,7 +22,6 @@
   let applePosition = { x: 1, y: 1 }
 
   let headPosition
-
   $: headPosition = snakeBody[snakeBody.length - 1]
   $: gameOver =
     gameOver ||
@@ -28,10 +29,8 @@
     snakeBody
       .slice(0, snakeBody.length - 1)
       .some(snakeSpace => isEqual(snakeSpace, headPosition))
-  $: if (isEqual(headPosition, applePosition)) {
-    eatApple()
-  }
 
+  // Movement
   let stopTicking = () => {}
   const startTicking = () => {
     const id = setInterval(moveSnake, TICK_TIME)
@@ -56,6 +55,10 @@
     return shouldGrow ? withAddedHead : withAddedHead.slice(1)
   }
 
+  $: if (isEqual(headPosition, applePosition)) {
+    eatApple()
+  }
+
   function eatApple() {
     score += 1
     willGrow = true
@@ -74,6 +77,7 @@
     return randomPick(openSpaces)
   }
 
+  // User interaction
   async function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
@@ -104,6 +108,7 @@
     }
   }
 
+  // Styling
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
       CELL_SIZE}px`
