@@ -3,15 +3,19 @@
 
   let snake_body = [
     { x: 4, y: 4 },
-    { x: 3, y: 3 },
-    { x: 2, y: 2 }
+    { x: 4, y: 3 },
+    { x: 4, y: 2 }
   ]
 
-  // TODO 2020-02-15 (Eirik V.): Calculate snake body and apple coordinates using a function
+  function calculatePositionAsStyle(coordinate) {
+    return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
+      CELL_SIZE}px`
+  }
 
   let apple_position = { x: 1, y: 1 }
 
   let board_dimensions = { x: 5, y: 5 }
+  // TODO 2020-02-15 (Eirik V.): Use https://github.com/kaisermann/svelte-css-vars
 </script>
 
 <style>
@@ -41,14 +45,8 @@
   style="width: {board_dimensions.x * CELL_SIZE}px; height: {board_dimensions.y * CELL_SIZE}px">
 
   {#each snake_body as body_part}
-    <div
-      class="body-part"
-      style="left: {body_part.x * CELL_SIZE}px; top: {body_part.y * CELL_SIZE}px" />
+    <div class="body-part" style={calculatePositionAsStyle(body_part)} />
   {/each}
 
-  <div
-    style="left: {apple_position.x * CELL_SIZE}px; top: {apple_position.y * CELL_SIZE}px"
-    class="apple">
-    🍎
-  </div>
+  <div style={calculatePositionAsStyle(apple_position)} class="apple">🍎</div>
 </div>
