@@ -13,13 +13,6 @@
     WEST: { x: -1, y: 0 },
   })
 
-  const OPPOSITES = Object.freeze(
-    Object.entries({ NORTH: "SOUTH", EAST: "WEST" }).reduce(
-      (accumulator, [k, v]) => ({ ...accumulator, [k]: v, [v]: k }),
-      {},
-    ),
-  )
-
   let snakeBody = [
     { x: 4, y: 2 },
     { x: 4, y: 3 },
@@ -66,12 +59,13 @@
       CELL_SIZE}px`
   }
 
+  function addCoordinates(coordA, coordB) {
+    return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
+  }
+
   function getNextSnakeBody(theBody, direction, shouldGrow) {
     const headCoordinate = theBody[snakeBody.length - 1]
-    const nextHead = {
-      x: headCoordinate.x + direction.x,
-      y: headCoordinate.y + direction.y,
-    }
+    const nextHead = addCoordinates(headCoordinate, direction)
     const withAddedHead = [...theBody, nextHead]
 
     return shouldGrow ? withAddedHead : withAddedHead.slice(1)
@@ -96,8 +90,12 @@
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
     // TODO 2020-02-15 (Eirik V.): Calculate this from neck instead of previous direction
-    const is180Turn =
-      newDirectionFromEventKey === OPPOSITES[headDirectionAsWords]
+    const neckPosition = snakeBody[snakeBody.length - 2]
+    const is180Turn = areSameCoordinate(
+      neckPosition,
+      addCoordinates(headPosition, DIRECTIONS[newDirectionFromEventKey]),
+    )
+
     if (!is180Turn) {
       headDirectionAsWords = newDirectionFromEventKey
     }
@@ -131,14 +129,14 @@
   }
 
   function eatApple() {
-    score = score + 1
+    score += 1
     isGrowingOnNextMove = true
     applePosition = getNewApplePosition()
 
     // TODO 2020-02-15 (Eirik V.): increment score and select new apple
   }
 
-  let stopMovement
+  let stopMovement = () => {}
 
   onMount(() => {
     const id = setInterval(moveSnake, MILLISECONDS_BEFORE_MOVING)
