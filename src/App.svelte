@@ -33,7 +33,12 @@
   let head_position
   $: head_position = snake_body[snake_body.length - 1]
   let gameOver
-  $: gameOver = !isInsideBoard(head_position)
+  $: gameOver =
+    gameOver ||
+    !isInsideBoard(head_position) ||
+    snake_body
+      .slice(0, snake_body.length - 1)
+      .some(snake_space => areSameCoordinate(snake_space, head_position))
 
   function isInsideBoard(coordinate) {
     return (
@@ -83,6 +88,7 @@
   }
 
   async function handleKeydown(event) {
+    // TODO 2020-02-15 (Eirik V.): Don't assign if it's the opposite
     head_direction_as_words = getNewDirectionFromEventKey(event.key)
     // TODO 2020-02-15 (Eirik V.): Make a task that
     await tick()
