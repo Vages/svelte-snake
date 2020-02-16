@@ -171,9 +171,9 @@
       linear-gradient(45deg, transparent 75%, var(--checker-color) 75%),
       linear-gradient(-45deg, transparent 75%, var(--checker-color) 75%);
     background-size: calc(var(--cell-size) * 2) calc(var(--cell-size) * 2);
-    background-position: 0 0, 0 calc(var(--cell-size) / 1),
-      calc(var(--cell-size) / 1) calc(var(--cell-size) / -1),
-      calc(var(--cell-size) / -1) 0px;
+    background-position: 0 0, 0 var(--cell-size),
+      var(--cell-size) calc(-1 * var(--cell-size)),
+      calc(-1 * var(--cell-size)) 0;
   }
 </style>
 
