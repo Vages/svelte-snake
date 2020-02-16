@@ -1,6 +1,8 @@
 <script>
   import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
+  // import { flip } from "svelte/animate"
+  // import { linear } from "svelte/easing"
 
   import HighScores from "./HighScores.svelte"
 
@@ -128,6 +130,9 @@
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
   }
+
+  // let indexedSnakeBody
+  // $: indexedSnakeBody = snakeBody.map((thing, index) => ({ ...thing, index }))
 </script>
 
 <style>
@@ -141,6 +146,7 @@
 
   .body-part {
     background-color: green;
+    /*border-radius: 2rem;*/
   }
 
   .apple {
@@ -167,6 +173,13 @@
   {#each snakeBody as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
+
+<!--  {#each indexedSnakeBody as bodyPart (bodyPart.index)}-->
+<!--    <div-->
+<!--            animate:flip={{ duration: TICK_TIME - 20, easing: linear }}-->
+<!--            class="body-part"-->
+<!--            style={calculatePositionAsStyle(bodyPart)} />-->
+<!--  {/each}-->
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
