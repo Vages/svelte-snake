@@ -139,8 +139,8 @@
 
   .board {
     position: relative;
-    margin: 1rem;
-    outline: 10px solid black;
+    margin: calc(var(--cell-size) * 2);
+    outline: var(--cell-size) solid black;
   }
 </style>
 
