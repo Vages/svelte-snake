@@ -9,10 +9,18 @@
   // Configuration
   const TICK_TIME = 100
   const CELL_SIZE = 25
-  const BOARD_DIMENSIONS = { x: 20, y: 20 }
+  let boardDimensions = { x: 20, y: 20 }
+
+  let innerWidth = 10000
+  let innerHeight = 10000
+
+  $: boardDimensions = {
+    x: Math.floor(innerWidth / CELL_SIZE) - 5,
+    y: Math.floor(innerHeight / CELL_SIZE) - 5,
+  }
 
   // Game state
-  let gameOver = true
+  let gameOver = false
   let score = 0
   let snakeBody = [
     { x: 4, y: 2 },
@@ -27,7 +35,7 @@
   $: headPosition = snakeBody[snakeBody.length - 1]
   $: gameOver =
     gameOver ||
-    !isInsideBoard(BOARD_DIMENSIONS, headPosition) ||
+    !isInsideBoard(boardDimensions, headPosition) ||
     snakeBody
       .slice(0, snakeBody.length - 1)
       .some(snakeSpace => isEqual(snakeSpace, headPosition))
@@ -64,7 +72,7 @@
   function eatApple() {
     score += 1
     willGrow = true
-    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snakeBody)
+    applePosition = getNewApplePosition(boardDimensions, snakeBody)
   }
 
   function getNewApplePosition(boardDimensions, snakeCoordinates) {
@@ -148,12 +156,13 @@
 
 <svelte:options immutable={true} />
 
+<svelte:window bind:innerWidth bind:innerHeight />
 <svelte:body on:keydown={handleKeydown} />
 
 <div
   use:cssVars={styleVars}
   class="board"
-  style="width: {BOARD_DIMENSIONS.x * CELL_SIZE}px; height: {BOARD_DIMENSIONS.y * CELL_SIZE}px">
+  style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
   {#each snakeBody as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
@@ -162,9 +171,12 @@
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
 
-<div>Head direction: {headDirection}</div>
-<div>Head position: {JSON.stringify(headPosition)}</div>
-<div>Score: {score}</div>
-<div>Game over: {gameOver}</div>
+<!--<div>Inner Width: {innerWidth}</div>-->
+<!--<div>Inner Heighth: {innerHeight}</div>-->
 
-<HighScores />
+<!--<div>Head direction: {headDirection}</div>-->
+<!--<div>Head position: {JSON.stringify(headPosition)}</div>-->
+<!--<div>Score: {score}</div>-->
+<!--<div>Game over: {gameOver}</div>-->
+
+<!--<HighScores />-->
