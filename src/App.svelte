@@ -136,7 +136,6 @@
   }
 
   .body-part,
-  .dark-cell,
   .apple {
     position: absolute;
     width: var(--cell-size);
@@ -146,7 +145,6 @@
 
   .body-part {
     background-color: green;
-    /*border-radius: 2rem;*/
   }
 
   .head,
@@ -156,10 +154,6 @@
 
   .apple {
     font-size: calc(var(--cell-size) * 0.8);
-  }
-
-  .dark-cell {
-    background-color: #f0f0f0;
   }
 
   .board {
