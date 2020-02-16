@@ -1,8 +1,6 @@
 <script>
   import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
-  // import { flip } from "svelte/animate"
-  // import { linear } from "svelte/easing"
 
   import HighScores from "./HighScores.svelte"
 
@@ -188,22 +186,5 @@
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
 
-  <!--  {#each indexedSnakeBody as bodyPart (bodyPart.index)}-->
-  <!--    <div-->
-  <!--            animate:flip={{ duration: TICK_TIME - 20, easing: linear }}-->
-  <!--            class="body-part"-->
-  <!--            style={calculatePositionAsStyle(bodyPart)} />-->
-  <!--  {/each}-->
-
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
-
-<!--<div>Inner Width: {innerWidth}</div>-->
-<!--<div>Inner Heighth: {innerHeight}</div>-->
-
-<!--<div>Head direction: {headDirection}</div>-->
-<!--<div>Head position: {JSON.stringify(headPosition)}</div>-->
-<!--<div>Score: {score}</div>-->
-<!--<div>Game over: {gameOver}</div>-->
-
-<!--<HighScores />-->
