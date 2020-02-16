@@ -127,6 +127,7 @@
   let styleVars
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
+    "tick-time": `${TICK_TIME}ms`,
   }
 </script>
 
@@ -149,7 +150,7 @@
 
   .head,
   .tail {
-    transition: top 100ms, left 100ms;
+    transition: top var(--tick-time), left var(--tick-time);
   }
 
   .apple {
@@ -157,7 +158,7 @@
   }
 
   .board {
-    /*transition: width 100ms, height 100ms;*/
+    /*transition: width var(--tick-time, height var(--tick-time;*/
     position: relative;
     margin: calc(var(--cell-size) * 2);
     outline: var(--cell-size) solid black;
