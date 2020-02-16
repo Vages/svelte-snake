@@ -128,17 +128,13 @@
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
   }
-
-  let darkCells
-  $: darkCells = [...Array(boardDimensions.x).keys()]
-    .flatMap(x => [...Array(boardDimensions.y).keys()].map(y => ({ x, y })))
-    .filter(({ x, y }) => (x + y) % 2)
-
-  // let indexedSnakeBody
-  // $: indexedSnakeBody = snakeBody.map((thing, index) => ({ ...thing, index }))
 </script>
 
 <style>
+  :root {
+    --checker-color: #f0f0f0;
+  }
+
   .body-part,
   .dark-cell,
   .apple {
@@ -153,6 +149,11 @@
     /*border-radius: 2rem;*/
   }
 
+  .head,
+  .tail {
+    transition: top 100ms, left 100ms;
+  }
+
   .apple {
     font-size: calc(var(--cell-size) * 0.8);
   }
@@ -162,9 +163,23 @@
   }
 
   .board {
+    /*transition: width 100ms, height 100ms;*/
     position: relative;
     margin: calc(var(--cell-size) * 2);
     outline: var(--cell-size) solid black;
+
+    background-image: linear-gradient(
+        45deg,
+        var(--checker-color) 25%,
+        transparent 25%
+      ),
+      linear-gradient(-45deg, var(--checker-color) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--checker-color) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--checker-color) 75%);
+    background-size: calc(var(--cell-size) * 2) calc(var(--cell-size) * 2);
+    background-position: 0 0, 0 calc(var(--cell-size) / 1),
+      calc(var(--cell-size) / 1) calc(var(--cell-size) / -1),
+      calc(var(--cell-size) / -1) 0px;
   }
 </style>
 
@@ -178,12 +193,12 @@
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
-  {#each darkCells as cell}
-    <div class="dark-cell" style={calculatePositionAsStyle(cell)} />
-  {/each}
-
-  {#each snakeBody as bodyPart}
-    <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
+  <div class="body-part tail" style={calculatePositionAsStyle(snakeBody[0])} />
+  {#each snakeBody as bodyPart, index}
+    <div
+      class="body-part"
+      class:head={index === snakeBody.length - 1}
+      style={calculatePositionAsStyle(bodyPart)} />
   {/each}
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
