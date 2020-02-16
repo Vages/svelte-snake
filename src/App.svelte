@@ -131,12 +131,18 @@
     "cell-size": `${CELL_SIZE}px`,
   }
 
+  let darkCells
+  $: darkCells = [...Array(boardDimensions.x).keys()]
+    .flatMap(x => [...Array(boardDimensions.y).keys()].map(y => ({ x, y })))
+    .filter(({ x, y }) => (x + y) % 2)
+
   // let indexedSnakeBody
   // $: indexedSnakeBody = snakeBody.map((thing, index) => ({ ...thing, index }))
 </script>
 
 <style>
   .body-part,
+  .dark-cell,
   .apple {
     position: absolute;
     width: var(--cell-size);
@@ -151,6 +157,10 @@
 
   .apple {
     font-size: calc(var(--cell-size) * 0.8);
+  }
+
+  .dark-cell {
+    background-color: #f0f0f0;
   }
 
   .board {
@@ -170,16 +180,20 @@
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
+  {#each darkCells as cell}
+    <div class="dark-cell" style={calculatePositionAsStyle(cell)} />
+  {/each}
+
   {#each snakeBody as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
 
-<!--  {#each indexedSnakeBody as bodyPart (bodyPart.index)}-->
-<!--    <div-->
-<!--            animate:flip={{ duration: TICK_TIME - 20, easing: linear }}-->
-<!--            class="body-part"-->
-<!--            style={calculatePositionAsStyle(bodyPart)} />-->
-<!--  {/each}-->
+  <!--  {#each indexedSnakeBody as bodyPart (bodyPart.index)}-->
+  <!--    <div-->
+  <!--            animate:flip={{ duration: TICK_TIME - 20, easing: linear }}-->
+  <!--            class="body-part"-->
+  <!--            style={calculatePositionAsStyle(bodyPart)} />-->
+  <!--  {/each}-->
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
