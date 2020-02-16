@@ -7,7 +7,7 @@
   // Configuration
   const TICK_TIME = 100
   const CELL_SIZE = 25
-  const BOARD_DIMENSIONS = { x: 40, y: 30 }
+  const BOARD_DIMENSIONS = { x: 20, y: 30 }
 
   // Game state
   let gameOver = false
