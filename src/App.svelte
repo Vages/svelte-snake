@@ -2,6 +2,8 @@
   import { tick, onMount } from "svelte"
   import cssVars from "svelte-css-vars"
 
+  import HighScores from "./HighScores.svelte"
+
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
   // Configuration
@@ -10,7 +12,7 @@
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
 
   // Game state
-  let gameOver = false
+  let gameOver = true
   let score = 0
   let snakeBody = [
     { x: 4, y: 2 },
@@ -164,3 +166,5 @@
 <div>Head position: {JSON.stringify(headPosition)}</div>
 <div>Score: {score}</div>
 <div>Game over: {gameOver}</div>
+
+<HighScores />
