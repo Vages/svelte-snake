@@ -189,12 +189,12 @@
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
   <div class="body-part tail" style={calculatePositionAsStyle(snakeBody[0])} />
-  {#each snakeBody as bodyPart, index}
-    <div
-      class="body-part"
-      class:head={index === snakeBody.length - 1}
-      style={calculatePositionAsStyle(bodyPart)} />
+  {#each snakeBody.slice(0, snakeBody.length - 1) as bodyPart, index}
+    <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
+  <div
+    class="body-part head"
+    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
