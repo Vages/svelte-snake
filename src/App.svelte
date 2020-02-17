@@ -139,8 +139,9 @@
   .body-part,
   .apple {
     position: absolute;
-    width: var(--cell-size);
-    height: var(--cell-size);
+    /* Add 1px to overlap and avoid tail animation glitch in FF */
+    width: calc(var(--cell-size) + 1px);
+    height: calc(var(--cell-size) + 1px);
     text-align: center;
   }
 
