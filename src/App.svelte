@@ -150,7 +150,7 @@
 
   .head,
   .tail {
-    transition: top var(--tick-time), left var(--tick-time);
+    transition: top var(--tick-time) linear, left var(--tick-time) linear;
   }
 
   .apple {
