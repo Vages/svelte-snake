@@ -23,22 +23,20 @@
   let gameOver = false
   let score = 0
   let snakeBody = [
-    { x: 4, y: 2 },
-    { x: 4, y: 3 },
     { x: 4, y: 4 },
+    { x: 4, y: 3 },
+    { x: 4, y: 2 },
   ]
   let headDirection = "SOUTH"
   let willGrow = false
   let applePosition = { x: 1, y: 1 }
 
   let headPosition
-  $: headPosition = snakeBody[snakeBody.length - 1]
+  $: headPosition = snakeBody[0]
   $: gameOver =
     gameOver ||
     !isInsideBoard(boardDimensions, headPosition) ||
-    snakeBody
-      .slice(0, snakeBody.length - 1)
-      .some(snakeSpace => isEqual(snakeSpace, headPosition))
+    snakeBody.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
 
   // Movement
   let stopTicking = () => {}
@@ -58,11 +56,13 @@
   }
 
   function getNextSnakeBody(theBody, direction, shouldGrow) {
-    const headCoordinate = theBody[snakeBody.length - 1]
+    const headCoordinate = theBody[0]
     const nextHead = add(headCoordinate, direction)
-    const withAddedHead = [...theBody, nextHead]
+    const withAddedHead = [nextHead, ...theBody]
 
-    return shouldGrow ? withAddedHead : withAddedHead.slice(1)
+    return shouldGrow
+      ? withAddedHead
+      : withAddedHead.slice(0, withAddedHead.length - 1)
   }
 
   $: if (isEqual(headPosition, applePosition)) {
@@ -91,7 +91,7 @@
   async function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    const neckPosition = snakeBody[snakeBody.length - 2]
+    const neckPosition = snakeBody[1]
 
     const is180Turn = isEqual(
       neckPosition,
@@ -159,7 +159,6 @@
   }
 
   .board {
-    /*transition: width var(--tick-time, height var(--tick-time;*/
     position: relative;
     margin: calc(var(--cell-size) * 2);
     outline: var(--cell-size) solid black;
@@ -189,12 +188,12 @@
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
-  <div class="body-part tail" style={calculatePositionAsStyle(snakeBody[0])} />
-  {#each snakeBody.slice(0, snakeBody.length - 1) as bodyPart, index}
+  <div class="body-part head" style={calculatePositionAsStyle(snakeBody[0])} />
+  {#each snakeBody.slice(1) as bodyPart, index}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
   <div
-    class="body-part head"
+    class="body-part tail"
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
