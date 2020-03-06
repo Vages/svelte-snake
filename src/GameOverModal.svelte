@@ -21,20 +21,37 @@
 
 <style>
   .modal {
-    background-color: red;
+    background-color: white;
     padding: 3rem;
   }
 </style>
 
-<div class="modal">
-  <h1>Game over</h1>
-  <div>Du fikk {score} poeng.</div>
+<div class="modal nes-container with-title is-rounded">
+  <h1 class="title">Game over</h1>
   <h2>High scores</h2>
-  {#each scores as user}
-    <div>{user.name} {user.score}</div>
-  {/each}
-  <h2>Send inn</h2>
-  <div>Skriv inn navnet ditt</div>
-  <input bind:value={name} />
-  <button on:click={sendHighScore}>Send inn</button>
+  <div class="nes-table-responsive">
+    <table class="nes-table is-bordered is-centered">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each scores as user}
+          <tr>
+            <td>{user.name}</td>
+            <td>{user.score}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+  <h2>Results</h2>
+  <div>You got {score} points.</div>
+  <label class="nes-field">
+    Name
+    <input id="name_field" type="text" class="nes-input" bind:value={name} />
+  </label>
+  <button class="nes-btn" on:click={sendHighScore}>Submit</button>
 </div>
