@@ -1,5 +1,4 @@
 <script>
-  import { fly } from "svelte/transition"
   import { onMount } from "svelte"
   export let score
   let name = "Nico"
@@ -26,15 +25,12 @@
   }
 
   .modal {
-    position: absolute;
-    top: 40px;
-    left: 40px;
     background-color: red;
     padding: 3rem;
   }
 </style>
 
-<div transition:fly={{ delay: 400, y: -100 }} class="modal">
+<div class="modal">
   <h1>Game over</h1>
   <div>Du fikk {score} poeng.</div>
   <h2>High scores</h2>

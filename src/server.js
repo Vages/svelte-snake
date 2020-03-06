@@ -21,8 +21,6 @@ export function makeServer({ environment = "development" } = {}) {
       })
 
       this.post("/scores", (schema, request) => {
-        console.log(request)
-        console.log(request.requestBody)
         schema.scores.create(request.requestBody)
       })
     },

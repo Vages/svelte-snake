@@ -1,11 +1,15 @@
 <script>
   import { tick, onMount } from "svelte"
+  import { scale, fly } from "svelte/transition"
   import cssVars from "svelte-css-vars"
 
   import HighScores from "./HighScores.svelte"
 
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
   import GameOverModal from "./GameOverModal.svelte"
+
+  const SKULL_DELAY = 200
+  const MODAL_DELAY = SKULL_DELAY + 1000
 
   // Configuration
   const TICK_TIME = 100
@@ -138,6 +142,7 @@
   }
 
   .body-part,
+  .skull,
   .apple {
     position: absolute;
     /* Add 1px to overlap and avoid tail animation glitch in FF */
@@ -157,6 +162,16 @@
 
   .apple {
     font-size: calc(var(--cell-size) * 0.8);
+  }
+
+  .skull {
+    transform: scale(3, 3) translateY(4px);
+  }
+
+  .modalContainer {
+    position: absolute;
+    top: 40px;
+    left: 40px;
   }
 
   .board {
@@ -200,8 +215,18 @@
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
+  {#if gameOver}
+    <div
+      transition:scale={{ delay: SKULL_DELAY }}
+      style={calculatePositionAsStyle(headPosition)}
+      class="skull">
+      ☠️
+    </div>
+  {/if}
 </div>
 
 {#if gameOver}
-  <GameOverModal {score} />
+  <div class="modalContainer" transition:fly={{ delay: MODAL_DELAY, y: -100 }}>
+    <GameOverModal {score} />
+  </div>
 {/if}
