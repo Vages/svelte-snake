@@ -5,6 +5,7 @@
   import HighScores from "./HighScores.svelte"
 
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
+  import GameOverModal from "./GameOverModal.svelte"
 
   // Configuration
   const TICK_TIME = 100
@@ -14,10 +15,10 @@
   let innerWidth = 10000
   let innerHeight = 10000
 
-  $: boardDimensions = {
-    x: Math.floor(innerWidth / CELL_SIZE) - 5,
-    y: Math.floor(innerHeight / CELL_SIZE) - 5,
-  }
+  // $: boardDimensions = {
+  //   x: Math.floor(innerWidth / CELL_SIZE) - 5,
+  //   y: Math.floor(innerHeight / CELL_SIZE) - 5,
+  // }
 
   // Game state
   let gameOver = false
@@ -180,8 +181,10 @@
 
 <svelte:options immutable={true} />
 
-<svelte:window bind:innerWidth bind:innerHeight />
+<!--<svelte:window bind:innerWidth bind:innerHeight />-->
 <svelte:body on:keydown={handleKeydown} />
+
+<div>Score: {score}</div>
 
 <div
   use:cssVars={styleVars}
@@ -198,3 +201,7 @@
 
   <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
 </div>
+
+{#if gameOver}
+  <GameOverModal {score} />
+{/if}
