@@ -20,10 +20,6 @@
 </script>
 
 <style>
-  div {
-    font-family: "Comic Sans MS", serif;
-  }
-
   .modal {
     background-color: red;
     padding: 3rem;
