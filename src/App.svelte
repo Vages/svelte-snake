@@ -4,13 +4,7 @@
   import cssVars from "svelte-css-vars"
 
   import GameOverModal from "./GameOverModal.svelte"
-  import {
-    add,
-    isEqual,
-    DIRECTION_TO_VECTOR,
-    isInsideBoard,
-    randomPick,
-  } from "./utils"
+  import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
   const SKULL_DELAY = 300
   const MODAL_DELAY = SKULL_DELAY + 1000
@@ -21,22 +15,22 @@
   let boardDimensions = { x: 20, y: 20 }
 
   // Game state
-  let gameOver
+  let gameOver = false
   let score = 0
-  let snake = [
+  let snakeBody = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
     { x: 4, y: 2 },
   ]
   let headDirection = "SOUTH"
   let willGrow = false
-  let apple = { x: 1, y: 1 }
+  let applePosition = { x: 1, y: 1 }
 
   let headPosition
-  $: headPosition = snake[0]
+  $: headPosition = snakeBody[0]
   $: gameOver =
     !isInsideBoard(boardDimensions, headPosition) ||
-    snake.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
+    snakeBody.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
 
   // Movement
   let stopTicking = () => {}
@@ -51,11 +45,11 @@
   }
 
   function moveSnake() {
-    snake = getNextSnake(snake, DIRECTION_TO_VECTOR[headDirection], willGrow)
+    snakeBody = getNextSnakeBody(snakeBody, DIRECTIONS[headDirection], willGrow)
     willGrow = false
   }
 
-  function getNextSnake(theBody, direction, shouldGrow) {
+  function getNextSnakeBody(theBody, direction, shouldGrow) {
     const headCoordinate = theBody[0]
     const nextHead = add(headCoordinate, direction)
     const withAddedHead = [nextHead, ...theBody]
@@ -65,14 +59,14 @@
       : withAddedHead.slice(0, withAddedHead.length - 1)
   }
 
-  $: if (isEqual(headPosition, apple)) {
+  $: if (isEqual(headPosition, applePosition)) {
     eatApple()
   }
 
   function eatApple() {
     score += 1
     willGrow = true
-    apple = getNewApplePosition(boardDimensions, snake)
+    applePosition = getNewApplePosition(boardDimensions, snakeBody)
   }
 
   function getNewApplePosition(boardDimensions, snakeCoordinates) {
@@ -91,11 +85,11 @@
   function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    const neckPosition = snake[1]
+    const neckPosition = snakeBody[1]
 
     const is180Turn = isEqual(
       neckPosition,
-      add(headPosition, DIRECTION_TO_VECTOR[newDirectionFromEventKey]),
+      add(headPosition, DIRECTIONS[newDirectionFromEventKey]),
     )
 
     if (!is180Turn) {
@@ -204,27 +198,33 @@
 <div>Score: {score}</div>
 
 <div
+  use:cssVars={styleVars}
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
-  <div class="body-part head" style={calculatePositionAsStyle(snake[0])} />
-  <!--  Because we want the head cell to move into an empty space, we skip it in this loop -->
-  {#each snake.slice(1) as bodyPart}
+  <div class="body-part head" style={calculatePositionAsStyle(snakeBody[0])} />
+  {#each snakeBody.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
   <div
     class="body-part tail"
-    style={calculatePositionAsStyle(snake[snake.length - 1])} />
+    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
   <!-- This extra tail is added to compensate for tail flickering in Chrome and Safari -->
   <div
     class="body-part tail"
-    style={calculatePositionAsStyle(snake[snake.length - 2])} />
+    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 2])} />
 
   <!--  We use two alternating apples in order to animate re-appearance on the board -->
   {#if score % 2}
-    <div in:scale style={calculatePositionAsStyle(apple)} class="apple" />
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple" />
   {:else}
-    <div in:scale style={calculatePositionAsStyle(apple)} class="apple" />
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple" />
   {/if}
 
   {#if gameOver}
