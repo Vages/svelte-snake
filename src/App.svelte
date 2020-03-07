@@ -23,7 +23,7 @@
   // Game state
   let gameOver = false
   let score = 0
-  let snakeBody = [
+  let snake = [
     { x: 4, y: 4 },
     { x: 4, y: 3 },
     { x: 4, y: 2 },
@@ -33,10 +33,9 @@
   let applePosition = { x: 1, y: 1 }
 
   let headPosition
-  $: headPosition = snakeBody[0]
+  $: headPosition = snake[0]
   $: gameOver =
-    !isInsideBoard(BOARD_DIMENSIONS, headPosition) ||
-    isSnakeEatingItself(snakeBody)
+    !isInsideBoard(BOARD_DIMENSIONS, headPosition) || isSnakeEatingItself(snake)
 
   // Movement
   let stopTicking = () => {}
@@ -51,7 +50,7 @@
   }
 
   function moveSnake() {
-    snakeBody = getNextSnakeBody(snakeBody, DIRECTIONS[headDirection], willGrow)
+    snake = getNextSnakeBody(snake, DIRECTIONS[headDirection], willGrow)
     willGrow = false
   }
 
@@ -62,14 +61,14 @@
   function eatApple() {
     score += 1
     willGrow = true
-    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snakeBody)
+    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snake)
   }
 
   // User interaction
   function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    const neckPosition = snakeBody[1]
+    const neckPosition = snake[1]
 
     const is180Turn = isEqual(
       neckPosition,
@@ -112,7 +111,7 @@
 <div>Score: {score}</div>
 
 <Board
-  snake={snakeBody}
+  {snake}
   apple={applePosition}
   {gameOver}
   boardDimensions={BOARD_DIMENSIONS}
