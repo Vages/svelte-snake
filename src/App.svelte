@@ -6,7 +6,7 @@
   import GameOverModal from "./GameOverModal.svelte"
   import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
-  const SKULL_DELAY = 500
+  const SKULL_DELAY = 300
   const MODAL_DELAY = SKULL_DELAY + 1000
 
   // Configuration
@@ -146,6 +146,7 @@
     width: var(--cell-size);
     height: var(--cell-size);
     text-align: center;
+    line-height: 1;
   }
 
   .body-part {
@@ -157,16 +158,20 @@
     transition: top var(--tick-time) linear, left var(--tick-time) linear;
   }
 
-  .apple {
+  .apple::before {
+    content: "🍎";
     font-size: calc(var(--cell-size) * 0.8);
-    margin-top: -0.3rem;
-    margin-left: -0.1rem;
+  }
+
+  .skull::before {
+    content: "☠️";
+    overflow: hidden;
   }
 
   .skull {
-    margin-top: -1rem;
-    margin-left: -0.1rem;
+    /* Transform cannot be applied to a before element */
     transform: scale(3, 3) translateY(4px);
+    transform-origin: 50% 50%;
   }
 
   .modalContainer {
@@ -220,22 +225,22 @@
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
   {#if score % 2}
-    <div in:scale style={calculatePositionAsStyle(applePosition)} class="apple">
-      🍎
-    </div>
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple" />
   {:else}
-    <div in:scale style={calculatePositionAsStyle(applePosition)} class="apple">
-      🍎
-    </div>
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple" />
   {/if}
 
   {#if gameOver}
     <div
       transition:scale={{ delay: SKULL_DELAY }}
       style={calculatePositionAsStyle(headPosition)}
-      class="skull">
-      ☠️
-    </div>
+      class="skull" />
   {/if}
 </div>
 
