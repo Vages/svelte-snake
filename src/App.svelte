@@ -14,9 +14,6 @@
   const CELL_SIZE = 25
   let boardDimensions = { x: 20, y: 20 }
 
-  let innerWidth = 10000
-  let innerHeight = 10000
-
   // Game state
   let gameOver = false
   let score = 0
