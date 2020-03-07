@@ -1,27 +1,21 @@
 <script>
   import { onMount } from "svelte"
+  import * as api from "./api"
   export let score
   let name = "Nico"
 
-  let highScorePromise
+  let getPromise
+  let postPromise
 
-  function fetchHighScores() {
-    highScorePromise = fetch("/api/scores")
-      .then(res => {
-        if (!res.ok) {
-          throw Error(res.statusText)
-        }
-        return res.json()
-      })
-      .then(j => j.scores)
+  function fetchScores() {
+    getPromise = api.fetchScores().then(j => j.scores)
   }
 
-  async function sendHighScore() {
-    await fetch("/api/scores", { method: "POST", body: { name, score } })
-    await fetchHighScores()
+  function postScore() {
+    postPromise = api.postScore({ name, score }).then(() => fetchScores())
   }
 
-  onMount(fetchHighScores)
+  onMount(fetchScores)
 </script>
 
 <style>
@@ -34,7 +28,7 @@
 <div class="modal nes-container with-title is-rounded">
   <h1 class="title">Game over</h1>
   <h2>High scores</h2>
-  {#await highScorePromise}
+  {#await getPromise}
     <p>Fetching scores</p>
   {:then highScores}
     <div>
@@ -58,14 +52,25 @@
       </div>
     </div>
   {:catch error}
-    Got error "{error.message}"
-    <button class="nes-btn" on:click={fetchHighScores}>Retry</button>
+    <span class="nes-text is-error">Got error "{error.message}"</span>
+    <button class="nes-btn" on:click={fetchScores}>Retry</button>
   {/await}
-  <h2>Results</h2>
-  <div>You got {score} points.</div>
-  <label class="nes-field">
-    Name
-    <input id="name_field" type="text" class="nes-input" bind:value={name} />
-  </label>
-  <button class="nes-btn" on:click={sendHighScore}>Submit</button>
+  <h2>Submit score</h2>
+  {#if !postPromise}
+    <div>You got {score} points.</div>
+    <label class="nes-field">
+      Name
+      <input id="name_field" type="text" class="nes-input" bind:value={name} />
+    </label>
+    <button class="nes-btn" on:click={postScore}>Submit</button>
+  {:else}
+    {#await postPromise}
+      <p>Submitting</p>
+    {:then success}
+      <div class="nes-text is-success">Score successfully submitted!</div>
+    {:catch error}
+      <span class="nes-text is-error">Got error "{error.message}"</span>
+      <button class="nes-btn" on:click={postScore}>Retry</button>
+    {/await}
+  {/if}
 </div>
