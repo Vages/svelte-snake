@@ -102,6 +102,7 @@
 
 <svelte:body on:keydown={handleKeydown} />
 
+<h1>Snake</h1>
 <div>Score: {score}</div>
 
 <Board

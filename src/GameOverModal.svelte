@@ -26,8 +26,8 @@
 </style>
 
 <div class="modal nes-container with-title is-rounded">
-  <h1 class="title">Game over</h1>
-  <h2>High scores</h2>
+  <h2 class="title">Game over</h2>
+  <h3>High scores</h3>
   {#await getPromise}
     <p>Fetching scores</p>
   {:then highScores}
@@ -55,7 +55,7 @@
     <span class="nes-text is-error">Got error "{error.message}"</span>
     <button class="nes-btn" on:click={fetchScores}>Retry</button>
   {/await}
-  <h2>Submit score</h2>
+  <h3>Submit score</h3>
   {#if !postPromise}
     <div>You got {score} points.</div>
     <form on:submit={postScore}>
