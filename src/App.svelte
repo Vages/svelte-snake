@@ -17,11 +17,6 @@
   let innerWidth = 10000
   let innerHeight = 10000
 
-  // $: boardDimensions = {
-  //   x: Math.floor(innerWidth / CELL_SIZE) - 5,
-  //   y: Math.floor(innerHeight / CELL_SIZE) - 5,
-  // }
-
   // Game state
   let gameOver = false
   let score = 0
@@ -202,7 +197,6 @@
 
 <svelte:options immutable={true} />
 
-<!--<svelte:window bind:innerWidth bind:innerHeight />-->
 <svelte:body on:keydown={handleKeydown} />
 
 <div>Score: {score}</div>
@@ -216,14 +210,15 @@
   {#each snakeBody.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
+  <div
+    class="body-part tail"
+    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
   <!-- This extra tail is added to compensate for tail flickering in Chrome and Safari -->
   <div
     class="body-part tail"
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 2])} />
-  <div
-    class="body-part tail"
-    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
+  <!--  We use two alternating apples in order to animate re-appearance on the board -->
   {#if score % 2}
     <div
       in:scale
