@@ -31,6 +31,7 @@
 
 <div class="modal nes-container with-title is-centered is-rounded">
   <h2 class="title">Game over</h2>
+  <div>You got {score} points.</div>
   <section>
     <h3>High scores</h3>
     {#await getPromise}
@@ -40,12 +41,6 @@
         class="nes-table-responsive"
         style="width: max-content; margin-left: auto; margin-right: auto;">
         <table class="nes-table is-bordered is-centered">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Points</th>
-            </tr>
-          </thead>
           <tbody>
             {#each highScores || [] as entry}
               <tr>
@@ -64,7 +59,6 @@
   <section>
     <h3>Submit score</h3>
     {#if !postPromise}
-      <div>You got {score} points.</div>
       <form on:submit={postScore}>
         <div>
           <label class="nes-field">
@@ -77,7 +71,7 @@
               bind:value={name} />
           </label>
         </div>
-        <button type="submit" class="nes-btn">Submit</button>
+        <button type="submit" class="nes-btn is-primary">Submit</button>
       </form>
     {:else}
       {#await postPromise}
