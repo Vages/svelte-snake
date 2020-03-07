@@ -182,7 +182,7 @@
 </div>
 
 {#if gameState === GAME_STATES.START_SCREEN}
-  <div class="modal-container" in:fly={{ y: -100 }}>
+  <div class="modal-container" out:fly={{ y: -100 }}>
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
       <StartModal />
