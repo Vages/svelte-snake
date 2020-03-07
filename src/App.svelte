@@ -182,10 +182,22 @@
 </div>
 
 {#if gameState === GAME_STATES.START_SCREEN}
-  <div class="modal-container" in:fly={{ delay: 1300, y: -100 }}>
+  <div class="modal-container" in:fly={{ y: -100 }}>
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
-      <StartModal on:start={() => (gameState = GAME_STATES.PLAYING)} />
+      <StartModal />
+    </div>
+  </div>
+{/if}
+
+{#if gameState === GAME_STATES.PAUSED}
+  <div class="modal-container" transition:fly={{ y: -100 }}>
+    <!-- This div, together with the class modal-container is required to center the content -->
+    <div style="position: relative; left: -50%;">
+      <NesContainer>
+        <h2>Pause</h2>
+        Space to resume
+      </NesContainer>
     </div>
   </div>
 {/if}
