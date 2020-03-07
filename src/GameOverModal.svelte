@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte"
   import * as api from "./api"
-  import ModalFrame from "./ModalFrame.svelte"
+  import NesContainer from "./NesContainer.svelte"
 
   export let score
   let name = ""
@@ -28,7 +28,7 @@
   }
 </style>
 
-<ModalFrame>
+<NesContainer>
   <h2 class="title">Game over</h2>
   <div>You got {score} points.</div>
   <section>
@@ -86,4 +86,4 @@
   <button on:click={() => dispatch('close_modal')} class="nes-btn">
     Close
   </button>
-</ModalFrame>
+</NesContainer>

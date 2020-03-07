@@ -13,7 +13,7 @@
     isInsideBoard,
     isSnakeEatingItself,
   } from "./utils"
-  import ModalFrame from "./ModalFrame.svelte"
+  import NesContainer from "./NesContainer.svelte"
 
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
@@ -169,7 +169,7 @@
   <div class="modal-container" in:fly={{ delay: 1300, y: -100 }}>
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
-      <ModalFrame>
+      <NesContainer>
         <h1>Snake</h1>
         <p>Eat 🍎, not yourself or walls</p>
         <div>Turn: Arrow keys/WASD</div>
@@ -178,7 +178,7 @@
           on:click={() => (gameState = GAME_STATES.PLAYING)}>
           Start!
         </button>
-      </ModalFrame>
+      </NesContainer>
     </div>
   </div>
 {/if}
@@ -187,7 +187,7 @@
   <div class="modal-container" in:fly={{ delay: 1300, y: -100 }}>
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
-      <GameOverModal
+      <NesContainer
         on:close_modal={() => (gameState = GAME_STATES.START_SCREEN)}
         {score} />
     </div>
