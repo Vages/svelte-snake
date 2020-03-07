@@ -4,7 +4,14 @@
   import cssVars from "svelte-css-vars"
 
   import GameOverModal from "./GameOverModal.svelte"
-  import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
+  import {
+    add,
+    DIRECTIONS,
+    getNewApplePosition,
+    getNextSnakeBody,
+    isEqual,
+    isInsideBoard,
+  } from "./utils"
 
   const SKULL_DELAY = 300
   const MODAL_DELAY = SKULL_DELAY + 1000
@@ -49,16 +56,6 @@
     willGrow = false
   }
 
-  function getNextSnakeBody(theBody, direction, shouldGrow) {
-    const headCoordinate = theBody[0]
-    const nextHead = add(headCoordinate, direction)
-    const withAddedHead = [nextHead, ...theBody]
-
-    return shouldGrow
-      ? withAddedHead
-      : withAddedHead.slice(0, withAddedHead.length - 1)
-  }
-
   $: if (isEqual(headPosition, applePosition)) {
     eatApple()
   }
@@ -67,18 +64,6 @@
     score += 1
     willGrow = true
     applePosition = getNewApplePosition(boardDimensions, snakeBody)
-  }
-
-  function getNewApplePosition(boardDimensions, snakeCoordinates) {
-    const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
-      [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
-    )
-    const openSpaces = boardSpaces.filter(
-      boardSpace =>
-        !snakeCoordinates.some(snakeSpace => isEqual(snakeSpace, boardSpace)),
-    )
-
-    return randomPick(openSpaces)
   }
 
   // User interaction
