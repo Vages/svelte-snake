@@ -3,12 +3,10 @@
   import { scale, fly } from "svelte/transition"
   import cssVars from "svelte-css-vars"
 
-  import HighScores from "./HighScores.svelte"
-
-  import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
   import GameOverModal from "./GameOverModal.svelte"
+  import { add, isEqual, DIRECTIONS, isInsideBoard, randomPick } from "./utils"
 
-  const SKULL_DELAY = 200
+  const SKULL_DELAY = 500
   const MODAL_DELAY = SKULL_DELAY + 1000
 
   // Configuration
@@ -162,9 +160,13 @@
 
   .apple {
     font-size: calc(var(--cell-size) * 0.8);
+    margin-top: -0.3rem;
+    margin-left: -0.1rem;
   }
 
   .skull {
+    margin-top: -1rem;
+    margin-left: -0.1rem;
     transform: scale(3, 3) translateY(4px);
   }
 
