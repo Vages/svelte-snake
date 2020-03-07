@@ -209,7 +209,7 @@
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
   <div class="body-part head" style={calculatePositionAsStyle(snakeBody[0])} />
-  {#each snakeBody.slice(1) as bodyPart, index}
+  {#each snakeBody.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
   <div
