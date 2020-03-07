@@ -1,6 +1,7 @@
 <script>
-  import { onMount } from "svelte"
+  import { createEventDispatcher, onMount } from "svelte"
   import * as api from "./api"
+
   export let score
   let name = ""
 
@@ -16,6 +17,8 @@
   }
 
   onMount(fetchScores)
+
+  const dispatch = createEventDispatcher()
 </script>
 
 <style>
@@ -80,8 +83,11 @@
         <div class="nes-text is-success">Successfully submitted!</div>
       {:catch error}
         <div class="nes-text is-error">Got error "{error.message}"</div>
-        <button class="nes-btn" on:click={postScore}>Retry</button>
+        <button class="nes-btn is-primary" on:click={postScore}>Retry</button>
       {/await}
     {/if}
   </section>
+  <button on:click={() => dispatch('close_modal')} class="nes-btn">
+    Close
+  </button>
 </div>

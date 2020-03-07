@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte"
+  import { onDestroy } from "svelte"
   import { fly } from "svelte/transition"
 
   import Board from "./Board.svelte"
@@ -17,21 +17,35 @@
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
 
-  let gameOver = false
-  let score = 0
-  let snake = [
-    { x: 4, y: 4 },
-    { x: 4, y: 3 },
-    { x: 4, y: 2 },
-  ]
-  let headDirection = "SOUTH"
-  let willGrow = false
-  let apple = { x: 1, y: 1 }
+  const GAME_STATES = {
+    START_SCREEN: "START_SCREEN",
+    PLAYING: "PLAYING",
+    GAME_OVER: "GAME_OVER",
+  }
 
-  let headPosition
-  $: headPosition = snake[0]
-  $: gameOver =
-    !isInsideBoard(BOARD_DIMENSIONS, headPosition) || isSnakeEatingItself(snake)
+  const INITIAL_GAME_STATE = GAME_STATES.START_SCREEN,
+    INITIAL_HEAD_DIRECTION = "SOUTH",
+    INITIAL_SCORE = 0,
+    INITIAL_SNAKE = [
+      { x: 4, y: 4 },
+      { x: 4, y: 3 },
+      { x: 4, y: 2 },
+    ],
+    INITIAL_WILL_GROW = false
+
+  let snake = INITIAL_SNAKE,
+    apple = getNewApplePosition(BOARD_DIMENSIONS, snake),
+    gameState = INITIAL_GAME_STATE,
+    headDirection = INITIAL_HEAD_DIRECTION,
+    score = INITIAL_SCORE,
+    willGrow = false
+
+  $: if (
+    snake &&
+    (!isInsideBoard(BOARD_DIMENSIONS, snake[0]) || isSnakeEatingItself(snake))
+  ) {
+    gameState = GAME_STATES.GAME_OVER
+  }
 
   let stopTicking = () => {}
   const startTicking = () => {
@@ -39,17 +53,13 @@
     stopTicking = () => clearInterval(id)
     return () => clearInterval(id)
   }
-  onMount(startTicking)
-  $: if (gameOver) {
-    stopTicking()
-  }
 
   function moveSnake() {
     snake = getNextSnakeBody(snake, DIRECTIONS[headDirection], willGrow)
     willGrow = false
   }
 
-  $: if (isEqual(headPosition, apple)) {
+  $: if (snake && apple && isEqual(snake[0], apple)) {
     eatApple()
   }
 
@@ -60,13 +70,16 @@
   }
 
   function handleKeydown(event) {
+    if (gameState !== GAME_STATES.PLAYING) {
+      return
+    }
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
     const neckPosition = snake[1]
 
     const is180Turn = isEqual(
       neckPosition,
-      add(headPosition, DIRECTIONS[newDirectionFromEventKey]),
+      add(snake[0], DIRECTIONS[newDirectionFromEventKey]),
     )
 
     if (!is180Turn) {
@@ -88,6 +101,24 @@
         return headDirection
     }
   }
+
+  function resetGame() {
+    headDirection = INITIAL_HEAD_DIRECTION
+    score = INITIAL_SCORE
+    snake = INITIAL_SNAKE
+    apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
+    willGrow = INITIAL_WILL_GROW
+  }
+
+  $: if (gameState === GAME_STATES.START_SCREEN) {
+    resetGame()
+  } else if (gameState === GAME_STATES.PLAYING) {
+    startTicking()
+  } else if (gameState === GAME_STATES.GAME_OVER) {
+    stopTicking()
+  }
+
+  onDestroy(stopTicking)
 </script>
 
 <style>
@@ -120,17 +151,23 @@
   <Board
     {snake}
     {apple}
-    {gameOver}
+    gameOver={gameState === GAME_STATES.GAME_OVER}
     boardDimensions={BOARD_DIMENSIONS}
     {score}
     tickTime={TICK_TIME} />
 </div>
 
-{#if gameOver}
-  <div class="modal-container" transition:fly={{ delay: 1300, y: -100 }}>
+{#if gameState === GAME_STATES.START_SCREEN}
+  <button on:click={() => (gameState = GAME_STATES.PLAYING)}>Start!</button>
+{/if}
+
+{#if gameState === GAME_STATES.GAME_OVER}
+  <div class="modal-container" in:fly={{ delay: 1300, y: -100 }}>
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
-      <GameOverModal {score} />
+      <GameOverModal
+        on:close_modal={() => (gameState = GAME_STATES.START_SCREEN)}
+        {score} />
     </div>
   </div>
 {/if}
