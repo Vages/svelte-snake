@@ -2,6 +2,7 @@
   export let apple
   export let boardDimensions
   export let gameOver
+  export let headDirection
   export let snake
   export let score
   export let tickTime
@@ -41,6 +42,10 @@
 
   .body-part {
     background-color: green;
+  }
+
+  .head {
+    transform: scale(1.3);
   }
 
   .head,
@@ -89,10 +94,10 @@
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
 
-  <div class="body-part head" style={calculatePositionAsStyle(snake[0])} />
   {#each snake.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
+  <div class="body-part head" style={calculatePositionAsStyle(snake[0])} />
   <div
     class="body-part tail"
     style={calculatePositionAsStyle(snake[snake.length - 1])} />
