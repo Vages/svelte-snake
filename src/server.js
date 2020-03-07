@@ -1,7 +1,9 @@
 import { Server, Model } from "miragejs"
+import { addCaos } from "miragejs-caos"
 
+const ServerWithCaos =  addCaos(Server, { level: "high" })
 export function makeServer({ environment = "development" } = {}) {
-  return new Server({
+  return new ServerWithCaos({
     environment,
 
     models: {

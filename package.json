@@ -19,6 +19,7 @@
     "commitlint-config-gitmoji": "https://github.com/arvinxx/commitlint-config-gitmoji.git",
     "husky": "^4.2.3",
     "miragejs": "^0.1.35",
+    "miragejs-caos": "^0.0.4",
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
     "rollup": "^1.20.0",
