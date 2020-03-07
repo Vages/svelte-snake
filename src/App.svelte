@@ -128,6 +128,7 @@
 
 {#if gameOver}
   <div class="modal-container" transition:fly={{ delay: 1300, y: -100 }}>
+    <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
       <GameOverModal {score} />
     </div>
