@@ -91,10 +91,21 @@
 </script>
 
 <style>
-  .modalContainer {
+  .modal-container {
     position: absolute;
-    top: 40px;
-    left: 40px;
+    left: 50%;
+    top: 2rem;
+  }
+
+  .min-width {
+    width: min-content;
+  }
+
+  .main-content {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
 
@@ -102,19 +113,23 @@
 
 <svelte:body on:keydown={handleKeydown} />
 
-<h1>Snake</h1>
-<div>Score: {score}</div>
+<div class="main-content min-width">
+  <h1>Snake</h1>
+  <div>Score: {score}</div>
 
-<Board
-  {snake}
-  {apple}
-  {gameOver}
-  boardDimensions={BOARD_DIMENSIONS}
-  {score}
-  tickTime={TICK_TIME} />
+  <Board
+    {snake}
+    {apple}
+    {gameOver}
+    boardDimensions={BOARD_DIMENSIONS}
+    {score}
+    tickTime={TICK_TIME} />
+</div>
 
 {#if gameOver}
-  <div class="modalContainer" transition:fly={{ delay: 1300, y: -100 }}>
-    <GameOverModal {score} />
+  <div class="modal-container" transition:fly={{ delay: 1300, y: -100 }}>
+    <div style="position: relative; left: -50%;">
+      <GameOverModal {score} />
+    </div>
   </div>
 {/if}
