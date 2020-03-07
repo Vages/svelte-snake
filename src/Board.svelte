@@ -59,14 +59,14 @@
   }
 
   .skull {
-    /* Transform cannot be applied to a before element */
+    /* Transform cannot be applied to a before element, so we must apply it here */
     transform: scale(3, 3) translateY(4px);
     transform-origin: 50% 50%;
   }
 
   .board {
     position: relative;
-    margin: calc(var(--cell-size) * 2);
+    margin: calc(var(--cell-size) * 1.5) 0;
     outline: var(--cell-size) solid black;
 
     background-image: linear-gradient(

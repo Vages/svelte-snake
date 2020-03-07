@@ -13,6 +13,7 @@
     isInsideBoard,
     isSnakeEatingItself,
   } from "./utils"
+  import ModalFrame from "./ModalFrame.svelte"
 
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
@@ -88,14 +89,22 @@
   }
 
   function getNewDirectionFromEventKey(key) {
+    // Also contains a secret Dvorak mode
     switch (key) {
       case "ArrowUp":
+      case "w":
+      case ",":
         return "NORTH"
       case "ArrowDown":
+      case "s":
+      case "o":
         return "SOUTH"
       case "ArrowLeft":
+      case "a":
         return "WEST"
       case "ArrowRight":
+      case "d":
+      case "e":
         return "EAST"
       default:
         return headDirection
@@ -136,7 +145,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
   }
 </style>
 
@@ -145,8 +154,7 @@
 <svelte:body on:keydown={handleKeydown} />
 
 <div class="main-content min-width">
-  <h1>Snake</h1>
-  <div>Score: {score}</div>
+  <div>{score}</div>
 
   <Board
     {snake}
@@ -158,7 +166,21 @@
 </div>
 
 {#if gameState === GAME_STATES.START_SCREEN}
-  <button on:click={() => (gameState = GAME_STATES.PLAYING)}>Start!</button>
+  <div class="modal-container" in:fly={{ delay: 1300, y: -100 }}>
+    <!-- This div, together with the class modal-container is required to center the content -->
+    <div style="position: relative; left: -50%;">
+      <ModalFrame>
+        <h1>Snake</h1>
+        <p>Eat 🍎, not yourself or walls</p>
+        <div>Turn: Arrow keys/WASD</div>
+        <button
+          class="nes-btn"
+          on:click={() => (gameState = GAME_STATES.PLAYING)}>
+          Start!
+        </button>
+      </ModalFrame>
+    </div>
+  </div>
 {/if}
 
 {#if gameState === GAME_STATES.GAME_OVER}
