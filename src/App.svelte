@@ -1,5 +1,5 @@
 <script>
-  import { tick, onMount } from "svelte"
+  import { onMount } from "svelte"
   import { scale, fly } from "svelte/transition"
   import cssVars from "svelte-css-vars"
 
