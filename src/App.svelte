@@ -14,11 +14,9 @@
     isSnakeEatingItself,
   } from "./utils"
 
-  // Configuration
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
 
-  // Game state
   let gameOver = false
   let score = 0
   let snake = [
@@ -35,7 +33,6 @@
   $: gameOver =
     !isInsideBoard(BOARD_DIMENSIONS, headPosition) || isSnakeEatingItself(snake)
 
-  // Movement
   let stopTicking = () => {}
   const startTicking = () => {
     const id = setInterval(moveSnake, TICK_TIME)
@@ -62,7 +59,6 @@
     apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
   }
 
-  // User interaction
   function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
