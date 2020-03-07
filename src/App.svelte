@@ -212,22 +212,20 @@
   {#each snakeBody.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}
+  <!-- This extra tail is added to compensate for tail flickering in Chrome and Safari -->
+  <div
+    class="body-part tail"
+    style={calculatePositionAsStyle(snakeBody[snakeBody.length - 2])} />
   <div
     class="body-part tail"
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
   {#if score % 2}
-    <div
-      in:scale
-      style={calculatePositionAsStyle(applePosition)}
-      class="apple">
+    <div in:scale style={calculatePositionAsStyle(applePosition)} class="apple">
       🍎
     </div>
   {:else}
-    <div
-      in:scale
-      style={calculatePositionAsStyle(applePosition)}
-      class="apple">
+    <div in:scale style={calculatePositionAsStyle(applePosition)} class="apple">
       🍎
     </div>
   {/if}
