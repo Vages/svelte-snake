@@ -11,6 +11,7 @@
     getNextSnakeBody,
     isEqual,
     isInsideBoard,
+    isSnakeEatingItself,
   } from "./utils"
 
   const SKULL_DELAY = 300
@@ -37,7 +38,7 @@
   $: headPosition = snakeBody[0]
   $: gameOver =
     !isInsideBoard(boardDimensions, headPosition) ||
-    snakeBody.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
+    isSnakeEatingItself(snakeBody)
 
   // Movement
   let stopTicking = () => {}

@@ -47,3 +47,8 @@ export function getNewApplePosition(boardDimensions, snakeCoordinates) {
 
   return randomPick(openSpaces)
 }
+
+export function isSnakeEatingItself(snake) {
+  const headPosition = snake[0]
+  return snake.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
+}
