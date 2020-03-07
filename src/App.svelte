@@ -44,7 +44,7 @@
     stopTicking()
   }
 
-  async function moveSnake() {
+  function moveSnake() {
     snakeBody = getNextSnakeBody(snakeBody, DIRECTIONS[headDirection], willGrow)
     willGrow = false
   }
@@ -82,7 +82,7 @@
   }
 
   // User interaction
-  async function handleKeydown(event) {
+  function handleKeydown(event) {
     const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
     const neckPosition = snakeBody[1]
