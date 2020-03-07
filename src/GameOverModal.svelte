@@ -2,7 +2,7 @@
   import { onMount } from "svelte"
   import * as api from "./api"
   export let score
-  let name = "Nico"
+  let name = ""
 
   let getPromise
   let postPromise
@@ -58,16 +58,25 @@
   <h2>Submit score</h2>
   {#if !postPromise}
     <div>You got {score} points.</div>
-    <label class="nes-field">
-      Name
-      <input id="name_field" type="text" class="nes-input" bind:value={name} />
-    </label>
-    <button class="nes-btn" on:click={postScore}>Submit</button>
+    <form on:submit={postScore}>
+      <div>
+        <label class="nes-field">
+          Name
+          <input
+            minlength="3"
+            required
+            type="text"
+            class="nes-input"
+            bind:value={name} />
+        </label>
+      </div>
+      <button type="submit" class="nes-btn">Submit</button>
+    </form>
   {:else}
     {#await postPromise}
       <p>Submitting</p>
     {:then success}
-      <div class="nes-text is-success">Score successfully submitted!</div>
+      <div class="nes-text is-success">Successfully submitted!</div>
     {:catch error}
       <span class="nes-text is-error">Got error "{error.message}"</span>
       <button class="nes-btn" on:click={postScore}>Retry</button>
