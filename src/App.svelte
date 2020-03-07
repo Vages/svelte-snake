@@ -18,7 +18,7 @@
 
   // Configuration
   const TICK_TIME = 100
-  let boardDimensions = { x: 20, y: 20 }
+  const BOARD_DIMENSIONS = { x: 20, y: 20 }
 
   // Game state
   let gameOver = false
@@ -35,7 +35,7 @@
   let headPosition
   $: headPosition = snakeBody[0]
   $: gameOver =
-    !isInsideBoard(boardDimensions, headPosition) ||
+    !isInsideBoard(BOARD_DIMENSIONS, headPosition) ||
     isSnakeEatingItself(snakeBody)
 
   // Movement
@@ -62,7 +62,7 @@
   function eatApple() {
     score += 1
     willGrow = true
-    applePosition = getNewApplePosition(boardDimensions, snakeBody)
+    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snakeBody)
   }
 
   // User interaction
@@ -115,7 +115,7 @@
   snake={snakeBody}
   apple={applePosition}
   {gameOver}
-  {boardDimensions}
+  boardDimensions={BOARD_DIMENSIONS}
   {score}
   tickTime={TICK_TIME} />
 
