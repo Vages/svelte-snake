@@ -14,8 +14,6 @@
     isSnakeEatingItself,
   } from "./utils"
 
-  const MODAL_DELAY = 1300
-
   // Configuration
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
@@ -119,7 +117,7 @@
   tickTime={TICK_TIME} />
 
 {#if gameOver}
-  <div class="modalContainer" transition:fly={{ delay: MODAL_DELAY, y: -100 }}>
+  <div class="modalContainer" transition:fly={{ delay: 1300, y: -100 }}>
     <GameOverModal {score} />
   </div>
 {/if}
