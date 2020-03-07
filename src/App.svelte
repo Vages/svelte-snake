@@ -29,7 +29,6 @@
   let headPosition
   $: headPosition = snakeBody[0]
   $: gameOver =
-    gameOver ||
     !isInsideBoard(boardDimensions, headPosition) ||
     snakeBody.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
 
