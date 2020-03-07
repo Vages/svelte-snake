@@ -143,9 +143,8 @@
   .skull,
   .apple {
     position: absolute;
-    /* Add 1px to overlap and avoid tail animation glitch in FF */
-    width: calc(var(--cell-size) + 1px);
-    height: calc(var(--cell-size) + 1px);
+    width: var(--cell-size);
+    height: var(--cell-size);
     text-align: center;
   }
 
