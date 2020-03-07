@@ -19,7 +19,7 @@ export function randomPick(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export const DIRECTIONS = Object.freeze({
+export const DIRECTION_TO_VECTOR = Object.freeze({
   NORTH: { x: 0, y: -1 },
   SOUTH: { x: 0, y: 1 },
   EAST: { x: 1, y: 0 },
