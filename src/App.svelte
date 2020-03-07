@@ -216,7 +216,22 @@
     class="body-part tail"
     style={calculatePositionAsStyle(snakeBody[snakeBody.length - 1])} />
 
-  <div style={calculatePositionAsStyle(applePosition)} class="apple">🍎</div>
+  {#if score % 2}
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple">
+      🍎
+    </div>
+  {:else}
+    <div
+      in:scale
+      style={calculatePositionAsStyle(applePosition)}
+      class="apple">
+      🍎
+    </div>
+  {/if}
+
   {#if gameOver}
     <div
       transition:scale={{ delay: SKULL_DELAY }}
