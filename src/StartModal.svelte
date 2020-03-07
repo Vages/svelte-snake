@@ -1,8 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte"
   import NesContainer from "./NesContainer.svelte"
-
-  const dispatch = createEventDispatcher()
 </script>
 
 <style>
@@ -14,8 +11,6 @@
     margin: 3rem 0;
   }
 </style>
-
-<svelte:body on:keydown={() => dispatch('start')} />
 
 <NesContainer>
   <h1>Snake</h1>

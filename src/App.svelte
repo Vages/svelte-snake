@@ -22,6 +22,7 @@
   const GAME_STATES = {
     START_SCREEN: "START_SCREEN",
     PLAYING: "PLAYING",
+    PAUSED: "PAUSED",
     GAME_OVER: "GAME_OVER",
   }
 
@@ -72,20 +73,32 @@
   }
 
   function handleKeydown(event) {
-    if (gameState !== GAME_STATES.PLAYING) {
+    if (gameState === GAME_STATES.START_SCREEN) {
+      gameState = GAME_STATES.PLAYING
       return
     }
-    const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
+    if (gameState === GAME_STATES.PAUSED) {
+      if (event.key === " ") {
+        gameState = GAME_STATES.PLAYING
+      }
+      return
+    }
+    if (gameState === GAME_STATES.PLAYING) {
+      if (event.key === " ") {
+        gameState = GAME_STATES.PAUSED
+      }
+      const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
 
-    const neckPosition = snake[1]
+      const neckPosition = snake[1]
 
-    const is180Turn = isEqual(
-      neckPosition,
-      add(snake[0], DIRECTIONS[newDirectionFromEventKey]),
-    )
+      const is180Turn = isEqual(
+        neckPosition,
+        add(snake[0], DIRECTIONS[newDirectionFromEventKey]),
+      )
 
-    if (!is180Turn) {
-      headDirection = newDirectionFromEventKey
+      if (!is180Turn) {
+        headDirection = newDirectionFromEventKey
+      }
     }
   }
 
@@ -124,6 +137,8 @@
     resetGame()
   } else if (gameState === GAME_STATES.PLAYING) {
     startTicking()
+  } else if (gameState === GAME_STATES.PAUSED) {
+    stopTicking()
   } else if (gameState === GAME_STATES.GAME_OVER) {
     stopTicking()
   }
