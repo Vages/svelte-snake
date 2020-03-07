@@ -30,7 +30,7 @@
   ]
   let headDirection = "SOUTH"
   let willGrow = false
-  let applePosition = { x: 1, y: 1 }
+  let apple = { x: 1, y: 1 }
 
   let headPosition
   $: headPosition = snake[0]
@@ -54,14 +54,14 @@
     willGrow = false
   }
 
-  $: if (isEqual(headPosition, applePosition)) {
+  $: if (isEqual(headPosition, apple)) {
     eatApple()
   }
 
   function eatApple() {
     score += 1
     willGrow = true
-    applePosition = getNewApplePosition(BOARD_DIMENSIONS, snake)
+    apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
   }
 
   // User interaction
@@ -112,7 +112,7 @@
 
 <Board
   {snake}
-  apple={applePosition}
+  {apple}
   {gameOver}
   boardDimensions={BOARD_DIMENSIONS}
   {score}
