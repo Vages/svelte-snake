@@ -13,7 +13,8 @@
     getPromise = api.fetchScores().then(j => j.scores)
   }
 
-  function postScore() {
+  function postScore(e) {
+    e.preventDefault()
     postPromise = api.postScore({ name, score }).then(() => fetchScores())
   }
 

@@ -2,7 +2,6 @@
   export let apple
   export let boardDimensions
   export let gameOver
-  export let headDirection
   export let snake
   export let score
   export let tickTime
@@ -115,7 +114,7 @@
 
   {#if gameOver}
     <div
-      transition:scale={{ delay: 300 }}
+      in:scale={{ delay: 300 }}
       style={calculatePositionAsStyle(snake[0])}
       class="skull" />
   {/if}
