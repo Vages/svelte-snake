@@ -64,7 +64,7 @@
     willGrow = false
   }
 
-  $: if (snake && apple && isEqual(snake[0], apple)) {
+  $: if (isEqual(snake[0], apple)) {
     eatApple()
   }
 
