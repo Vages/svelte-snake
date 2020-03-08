@@ -1,24 +1,3 @@
-export function isEqual(coordA, coordB) {
-  return coordA.x === coordB.x && coordA.y === coordB.y
-}
-
-export function isInsideBoard(boardDimensions, coordinate) {
-  return (
-    coordinate.x >= 0 &&
-    coordinate.x < boardDimensions.x &&
-    coordinate.y >= 0 &&
-    coordinate.y < boardDimensions.y
-  )
-}
-
-export function add(coordA, coordB) {
-  return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
-}
-
-function randomPick(array) {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
 export const DIRECTIONS = Object.freeze({
   NORTH: "NORTH",
   SOUTH: "SOUTH",
@@ -32,6 +11,27 @@ export const DIRECTION_VECTORS = Object.freeze({
   [DIRECTIONS.EAST]: { x: 1, y: 0 },
   [DIRECTIONS.WEST]: { x: -1, y: 0 },
 })
+
+export function add(coordA, coordB) {
+  return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
+}
+
+export function isEqual(coordA, coordB) {
+  return coordA.x === coordB.x && coordA.y === coordB.y
+}
+
+function randomElement(array) {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+export function isInsideBoard(boardDimensions, coordinate) {
+  return (
+    coordinate.x >= 0 &&
+    coordinate.x < boardDimensions.x &&
+    coordinate.y >= 0 &&
+    coordinate.y < boardDimensions.y
+  )
+}
 
 export function getNextSnakeBody(theBody, direction, shouldGrow) {
   const headCoordinate = theBody[0]
@@ -52,7 +52,7 @@ export function getNewApplePosition(boardDimensions, snakeCoordinates) {
       !snakeCoordinates.some(snakeSpace => isEqual(snakeSpace, boardSpace)),
   )
 
-  return randomPick(openSpaces)
+  return randomElement(openSpaces)
 }
 
 export function isSnakeEatingItself(snake) {
