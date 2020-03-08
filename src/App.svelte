@@ -5,6 +5,7 @@
   import Board from "./Board.svelte"
   import GameOverModal from "./GameOverModal.svelte"
   import {
+    DIRECTIONS,
     DIRECTION_VECTORS,
     getNewApplePosition,
     getNewDirectionFromEventKey,
@@ -28,7 +29,7 @@
   })
 
   const INITIAL_GAME_STATE = GAME_STATES.START_SCREEN,
-    INITIAL_HEAD_DIRECTION = "SOUTH",
+    INITIAL_HEAD_DIRECTION = DIRECTIONS.SOUTH,
     INITIAL_SCORE = 0,
     INITIAL_SNAKE = [
       { x: 4, y: 4 },

@@ -19,11 +19,18 @@ function randomPick(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
+export const DIRECTIONS = Object.freeze({
+  NORTH: "NORTH",
+  SOUTH: "SOUTH",
+  EAST: "EAST",
+  WEST: "WEST",
+})
+
 export const DIRECTION_VECTORS = Object.freeze({
-  NORTH: { x: 0, y: -1 },
-  SOUTH: { x: 0, y: 1 },
-  EAST: { x: 1, y: 0 },
-  WEST: { x: -1, y: 0 },
+  [DIRECTIONS.NORTH]: { x: 0, y: -1 },
+  [DIRECTIONS.SOUTH]: { x: 0, y: 1 },
+  [DIRECTIONS.EAST]: { x: 1, y: 0 },
+  [DIRECTIONS.WEST]: { x: -1, y: 0 },
 })
 
 export function getNextSnakeBody(theBody, direction, shouldGrow) {
@@ -69,18 +76,18 @@ export function getNewDirectionFromEventKey(key) {
     case "ArrowUp":
     case "w":
     case ",":
-      return "NORTH"
+      return DIRECTIONS.NORTH
     case "ArrowDown":
     case "s":
     case "o":
-      return "SOUTH"
+      return DIRECTIONS.SOUTH
     case "ArrowLeft":
     case "a":
-      return "WEST"
+      return DIRECTIONS.WEST
     case "ArrowRight":
     case "d":
     case "e":
-      return "EAST"
+      return DIRECTIONS.EAST
     default:
       return null
   }
