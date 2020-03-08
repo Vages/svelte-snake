@@ -88,6 +88,9 @@
         gameState = GAME_STATES.PAUSED
       }
       const keyDirection = getNewDirectionFromEventKey(event.key)
+      if (!keyDirection) {
+        return
+      }
 
       if (!is180Turn(snake, keyDirection)) {
         headDirection = keyDirection
@@ -114,7 +117,7 @@
       case "e":
         return "EAST"
       default:
-        return headDirection
+        return null
     }
   }
 
