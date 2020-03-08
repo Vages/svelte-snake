@@ -19,12 +19,12 @@
   const TICK_TIME = 100
   const BOARD_DIMENSIONS = { x: 20, y: 20 }
 
-  const GAME_STATES = {
+  const GAME_STATES = Object.freeze({
     START_SCREEN: "START_SCREEN",
     PLAYING: "PLAYING",
     PAUSED: "PAUSED",
     GAME_OVER: "GAME_OVER",
-  }
+  })
 
   const INITIAL_GAME_STATE = GAME_STATES.START_SCREEN,
     INITIAL_HEAD_DIRECTION = "SOUTH",
