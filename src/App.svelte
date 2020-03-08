@@ -38,16 +38,25 @@
     ],
     INITIAL_WILL_GROW = false
 
-  let snake = INITIAL_SNAKE,
-    apple = getNewApplePosition(BOARD_DIMENSIONS, snake),
+  let apple = getNewApplePosition(BOARD_DIMENSIONS, INITIAL_SNAKE),
     gameState = INITIAL_GAME_STATE,
     headDirection = INITIAL_HEAD_DIRECTION,
     score = INITIAL_SCORE,
-    willGrow = false
+    snake = INITIAL_SNAKE,
+    willGrow = INITIAL_WILL_GROW
+
+  function resetGame() {
+    apple = getNewApplePosition(BOARD_DIMENSIONS, INITIAL_SNAKE)
+    gameState = INITIAL_GAME_STATE
+    headDirection = INITIAL_HEAD_DIRECTION
+    score = INITIAL_SCORE
+    snake = INITIAL_SNAKE
+    willGrow = INITIAL_WILL_GROW
+  }
 
   $: if (
-    snake &&
-    (!isInsideBoard(BOARD_DIMENSIONS, snake[0]) || isSnakeEatingItself(snake))
+    !isInsideBoard(BOARD_DIMENSIONS, snake[0]) ||
+    isSnakeEatingItself(snake)
   ) {
     gameState = GAME_STATES.GAME_OVER
   }
@@ -98,14 +107,6 @@
         headDirection = keyDirection
       }
     }
-  }
-
-  function resetGame() {
-    headDirection = INITIAL_HEAD_DIRECTION
-    score = INITIAL_SCORE
-    snake = INITIAL_SNAKE
-    apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
-    willGrow = INITIAL_WILL_GROW
   }
 
   $: if (gameState === GAME_STATES.START_SCREEN) {
