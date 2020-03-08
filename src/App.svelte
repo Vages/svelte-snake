@@ -7,6 +7,7 @@
   import {
     DIRECTIONS,
     getNewApplePosition,
+    getNewDirectionFromEventKey,
     getNextSnakeBody,
     is180Turn,
     isEqual,
@@ -95,29 +96,6 @@
       if (!is180Turn(snake, keyDirection)) {
         headDirection = keyDirection
       }
-    }
-  }
-
-  function getNewDirectionFromEventKey(key) {
-    // Also contains a secret Dvorak mode
-    switch (key) {
-      case "ArrowUp":
-      case "w":
-      case ",":
-        return "NORTH"
-      case "ArrowDown":
-      case "s":
-      case "o":
-        return "SOUTH"
-      case "ArrowLeft":
-      case "a":
-        return "WEST"
-      case "ArrowRight":
-      case "d":
-      case "e":
-        return "EAST"
-      default:
-        return null
     }
   }
 
