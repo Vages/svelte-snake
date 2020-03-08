@@ -28,31 +28,23 @@
     GAME_OVER: "GAME_OVER",
   })
 
-  const INITIAL_GAME_STATE = GAME_STATES.START_SCREEN,
-    INITIAL_HEAD_DIRECTION = DIRECTIONS.SOUTH,
-    INITIAL_SCORE = 0,
-    INITIAL_SNAKE = [
+  let apple, gameState, headDirection, score, snake, willGrow
+
+  function resetGame() {
+    const INITIAL_SNAKE = [
       { x: 4, y: 4 },
       { x: 4, y: 3 },
       { x: 4, y: 2 },
-    ],
-    INITIAL_WILL_GROW = false
-
-  let apple = getNewApplePosition(BOARD_DIMENSIONS, INITIAL_SNAKE),
-    gameState = INITIAL_GAME_STATE,
-    headDirection = INITIAL_HEAD_DIRECTION,
-    score = INITIAL_SCORE,
-    snake = INITIAL_SNAKE,
-    willGrow = INITIAL_WILL_GROW
-
-  function resetGame() {
+    ]
     apple = getNewApplePosition(BOARD_DIMENSIONS, INITIAL_SNAKE)
-    gameState = INITIAL_GAME_STATE
-    headDirection = INITIAL_HEAD_DIRECTION
-    score = INITIAL_SCORE
+    gameState = GAME_STATES.START_SCREEN
+    headDirection = DIRECTIONS.SOUTH
+    score = 0
     snake = INITIAL_SNAKE
-    willGrow = INITIAL_WILL_GROW
+    willGrow = false
   }
+
+  resetGame()
 
   $: if (
     !isInsideBoard(BOARD_DIMENSIONS, snake[0]) ||
