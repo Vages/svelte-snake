@@ -106,14 +106,19 @@
   }
 
   // Reacting to changed states
-  $: if (gameState === GAME_STATES.START_SCREEN) {
-    resetGame()
-  } else if (gameState === GAME_STATES.PLAYING) {
-    startTicking()
-  } else if (gameState === GAME_STATES.PAUSED) {
-    stopTicking()
-  } else if (gameState === GAME_STATES.GAME_OVER) {
-    stopTicking()
+  $: handleStateChange(gameState)
+  // Extracting it as a separate function to avoid it being called when variables other than gameState
+  // are reassigned, namely stopTicking, which is reassigned on startTicking
+  function handleStateChange(newState) {
+    if (newState === GAME_STATES.START_SCREEN) {
+      resetGame()
+    } else if (newState === GAME_STATES.PLAYING) {
+      startTicking()
+    } else if (newState === GAME_STATES.PAUSED) {
+      stopTicking()
+    } else if (newState === GAME_STATES.GAME_OVER) {
+      stopTicking()
+    }
   }
 
   // Stop calling functions in intervals when the functions stop existing (i.e. when the component unmounts)
