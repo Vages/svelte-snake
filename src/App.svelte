@@ -137,10 +137,25 @@
   }
 
   .main-content {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    margin: 1rem auto 0 auto;
+    display: grid;
+    grid-template-columns: auto;
+    gap: 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .score {
+    justify-self: right;
+  }
+  .signature {
+    font-size: 0.5rem;
+  }
+
+  .signature img {
+    height: 2em;
+    margin-right: -0.5em;
+    margin-top: -0.25em;
   }
 </style>
 
@@ -149,7 +164,7 @@
 <svelte:body on:keydown={handleKeydown} />
 
 <div class="main-content min-width">
-  <div>{score}</div>
+  <div class="score">{score}</div>
 
   <Board
     {snake}
@@ -158,6 +173,21 @@
     boardDimensions={BOARD_DIMENSIONS}
     {score}
     tickTime={TICK_TIME} />
+  <div class="signature">
+    <p>
+      Made with
+      <a href="https://svelte.dev/">
+        <img alt="Svelte logo" src="/svelte.png" />
+        Svelte
+      </a>
+      by
+      <a href="https://github.com/vages">Eirik Vågeskar</a>
+    </p>
+    <p>
+      Find
+      <a href="https://github.com/Vages/svelte-snake">the code on Github</a>
+    </p>
+  </div>
 </div>
 
 {#if gameState === GAME_STATES.START_SCREEN}

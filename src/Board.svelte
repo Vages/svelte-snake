@@ -64,9 +64,11 @@
   }
 
   .board {
+    --border-width: var(--cell-size);
+
     position: relative;
-    margin: calc(var(--cell-size) * 1.5) 0;
-    outline: var(--cell-size) solid black;
+    margin: var(--border-width);
+    outline: var(--border-width) solid black;
 
     background-image: linear-gradient(
         45deg,
