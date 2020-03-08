@@ -19,7 +19,7 @@ function randomPick(array) {
   return array[Math.floor(Math.random() * array.length)]
 }
 
-export const DIRECTIONS = Object.freeze({
+export const DIRECTION_VECTORS = Object.freeze({
   NORTH: { x: 0, y: -1 },
   SOUTH: { x: 0, y: 1 },
   EAST: { x: 1, y: 0 },
@@ -58,7 +58,7 @@ export function is180Turn(snake, newDirectionFromEventKey) {
   const head = snake[0]
   const headWouldEatNeck = isEqual(
     neck,
-    add(head, DIRECTIONS[newDirectionFromEventKey]),
+    add(head, DIRECTION_VECTORS[newDirectionFromEventKey]),
   )
   return headWouldEatNeck
 }

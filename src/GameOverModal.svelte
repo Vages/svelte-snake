@@ -4,21 +4,20 @@
   import NesContainer from "./NesContainer.svelte"
 
   export let score
-  let name = ""
 
   let getPromise
-  let postPromise
-
   function fetchScores() {
     getPromise = api.fetchScores().then(j => j.scores)
   }
 
+  onMount(fetchScores)
+
+  let name = ""
+  let postPromise
   function postScore(e) {
     e.preventDefault()
     postPromise = api.postScore({ name, score }).then(() => fetchScores())
   }
-
-  onMount(fetchScores)
 
   const dispatch = createEventDispatcher()
 </script>

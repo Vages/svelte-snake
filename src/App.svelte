@@ -5,7 +5,7 @@
   import Board from "./Board.svelte"
   import GameOverModal from "./GameOverModal.svelte"
   import {
-    DIRECTIONS,
+    DIRECTION_VECTORS,
     getNewApplePosition,
     getNewDirectionFromEventKey,
     getNextSnakeBody,
@@ -59,7 +59,7 @@
   }
 
   function moveSnake() {
-    snake = getNextSnakeBody(snake, DIRECTIONS[headDirection], willGrow)
+    snake = getNextSnakeBody(snake, DIRECTION_VECTORS[headDirection], willGrow)
     willGrow = false
   }
 
