@@ -1,10 +1,5 @@
 <script>
-  export let apple
-  export let boardDimensions
-  export let gameOver
-  export let snake
-  export let score
-  export let tickTime
+  export let apple, boardDimensions, gameOver, snake, score, tickTime
 
   import cssVars from "svelte-css-vars"
   import { scale } from "svelte/transition"
