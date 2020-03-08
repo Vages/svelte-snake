@@ -9,7 +9,7 @@
     DIRECTION_VECTORS,
     getNewApplePosition,
     getNewDirectionFromEventKey,
-    getNextSnakeBody,
+    getNextSnake,
     is180Turn,
     isEqual,
     isInsideBoard,
@@ -28,23 +28,29 @@
     GAME_OVER: "GAME_OVER",
   })
 
+  // Letting the state variables go uninitialized is safe,
+  // because they are initialized by resetGame before they are ever read
   let apple, gameState, headDirection, score, snake, willGrow
-
   function resetGame() {
-    const INITIAL_SNAKE = [
+    const initialSnake = [
       { x: 4, y: 4 },
       { x: 4, y: 3 },
       { x: 4, y: 2 },
     ]
-    apple = getNewApplePosition(BOARD_DIMENSIONS, INITIAL_SNAKE)
+    apple = getNewApplePosition(BOARD_DIMENSIONS, initialSnake)
     gameState = GAME_STATES.START_SCREEN
     headDirection = DIRECTIONS.SOUTH
     score = 0
-    snake = INITIAL_SNAKE
+    snake = initialSnake
     willGrow = false
   }
-
   resetGame()
+
+  // Snake logic
+  function moveSnake() {
+    snake = getNextSnake(snake, DIRECTION_VECTORS[headDirection], willGrow)
+    willGrow = false
+  }
 
   $: if (
     !isInsideBoard(BOARD_DIMENSIONS, snake[0]) ||
@@ -53,18 +59,7 @@
     gameState = GAME_STATES.GAME_OVER
   }
 
-  let stopTicking = () => {}
-  const startTicking = () => {
-    const id = setInterval(moveSnake, TICK_TIME)
-    stopTicking = () => clearInterval(id)
-    return () => clearInterval(id)
-  }
-
-  function moveSnake() {
-    snake = getNextSnakeBody(snake, DIRECTION_VECTORS[headDirection], willGrow)
-    willGrow = false
-  }
-
+  // Apple logic
   $: if (isEqual(snake[0], apple)) {
     eatApple()
   }
@@ -75,6 +70,7 @@
     apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
   }
 
+  // User interaction
   function handleKeydown(event) {
     if (gameState === GAME_STATES.START_SCREEN) {
       gameState = GAME_STATES.PLAYING
@@ -101,6 +97,15 @@
     }
   }
 
+  // Starting and stopping gameplay
+  let stopTicking = () => {}
+  const startTicking = () => {
+    const id = setInterval(moveSnake, TICK_TIME)
+    stopTicking = () => clearInterval(id)
+    return () => clearInterval(id)
+  }
+
+  // Reacting to changed states
   $: if (gameState === GAME_STATES.START_SCREEN) {
     resetGame()
   } else if (gameState === GAME_STATES.PLAYING) {
@@ -111,6 +116,7 @@
     stopTicking()
   }
 
+  // Stop calling functions in intervals when the functions stop existing (i.e. when the component unmounts)
   onDestroy(stopTicking)
 </script>
 

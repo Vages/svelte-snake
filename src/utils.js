@@ -29,7 +29,7 @@ export function isInsideBoard(boardDimensions, coordinate) {
   )
 }
 
-export function getNextSnakeBody(theBody, direction, shouldGrow) {
+export function getNextSnake(theBody, direction, shouldGrow) {
   const headCoordinate = theBody[0]
   const nextHead = add(headCoordinate, direction)
   const withAddedHead = [nextHead, ...theBody]
