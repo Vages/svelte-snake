@@ -20,10 +20,6 @@ export function isEqual(coordA, coordB) {
   return coordA.x === coordB.x && coordA.y === coordB.y
 }
 
-function randomElement(array) {
-  return array[Math.floor(Math.random() * array.length)]
-}
-
 export function isInsideBoard(boardDimensions, coordinate) {
   return (
     coordinate.x >= 0 &&
@@ -52,7 +48,7 @@ export function getNewApplePosition(boardDimensions, snakeCoordinates) {
       !snakeCoordinates.some(snakeSpace => isEqual(snakeSpace, boardSpace)),
   )
 
-  return randomElement(openSpaces)
+  return openSpaces[Math.floor(Math.random() * openSpaces.length)]
 }
 
 export function isSnakeEatingItself(snake) {
@@ -61,11 +57,11 @@ export function isSnakeEatingItself(snake) {
 }
 
 export function is180Turn(snake, newDirectionFromEventKey) {
-  const neck = snake[1]
   const head = snake[0]
+  const neck = snake[1]
   const headWouldEatNeck = isEqual(
-    neck,
     add(head, DIRECTION_VECTORS[newDirectionFromEventKey]),
+    neck,
   )
   return headWouldEatNeck
 }
