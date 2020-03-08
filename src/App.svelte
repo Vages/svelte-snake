@@ -5,10 +5,10 @@
   import Board from "./Board.svelte"
   import GameOverModal from "./GameOverModal.svelte"
   import {
-    add,
     DIRECTIONS,
     getNewApplePosition,
     getNextSnakeBody,
+    is180Turn,
     isEqual,
     isInsideBoard,
     isSnakeEatingItself,
@@ -87,17 +87,10 @@
       if (event.key === " ") {
         gameState = GAME_STATES.PAUSED
       }
-      const newDirectionFromEventKey = getNewDirectionFromEventKey(event.key)
+      const keyDirection = getNewDirectionFromEventKey(event.key)
 
-      const neckPosition = snake[1]
-
-      const is180Turn = isEqual(
-        neckPosition,
-        add(snake[0], DIRECTIONS[newDirectionFromEventKey]),
-      )
-
-      if (!is180Turn) {
-        headDirection = newDirectionFromEventKey
+      if (!is180Turn(snake, keyDirection)) {
+        headDirection = keyDirection
       }
     }
   }

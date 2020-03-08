@@ -52,3 +52,13 @@ export function isSnakeEatingItself(snake) {
   const headPosition = snake[0]
   return snake.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
 }
+
+export function is180Turn(snake, newDirectionFromEventKey) {
+  const neck = snake[1]
+  const head = snake[0]
+  const headWouldEatNeck = isEqual(
+    neck,
+    add(head, DIRECTIONS[newDirectionFromEventKey]),
+  )
+  return headWouldEatNeck
+}
