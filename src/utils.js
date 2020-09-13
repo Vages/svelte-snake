@@ -12,12 +12,12 @@ export const DIRECTION_VECTORS = Object.freeze({
   [DIRECTIONS.WEST]: { x: -1, y: 0 },
 })
 
-export function add(coordA, coordB) {
-  return { x: coordA.x + coordB.x, y: coordA.y + coordB.y }
+export function add(coordinateA, coordinateB) {
+  return { x: coordinateA.x + coordinateB.x, y: coordinateA.y + coordinateB.y }
 }
 
-export function isEqual(coordA, coordB) {
-  return coordA.x === coordB.x && coordA.y === coordB.y
+export function isEqual(coordinateA, coordinateB) {
+  return coordinateA.x === coordinateB.x && coordinateA.y === coordinateB.y
 }
 
 export function isInsideBoard(boardDimensions, coordinate) {
@@ -29,10 +29,10 @@ export function isInsideBoard(boardDimensions, coordinate) {
   )
 }
 
-export function getNextSnake(theBody, direction, shouldGrow) {
-  const headCoordinate = theBody[0]
+export function getNextSnake(snake, direction, shouldGrow) {
+  const headCoordinate = snake[0]
   const nextHead = add(headCoordinate, direction)
-  const withAddedHead = [nextHead, ...theBody]
+  const withAddedHead = [nextHead, ...snake]
 
   return shouldGrow
     ? withAddedHead
