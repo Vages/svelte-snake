@@ -1,15 +1,8 @@
-export const DIRECTIONS = Object.freeze({
-  NORTH: "NORTH",
-  SOUTH: "SOUTH",
-  EAST: "EAST",
-  WEST: "WEST",
-})
-
 export const DIRECTION_VECTORS = Object.freeze({
-  [DIRECTIONS.NORTH]: { x: 0, y: -1 },
-  [DIRECTIONS.SOUTH]: { x: 0, y: 1 },
-  [DIRECTIONS.EAST]: { x: 1, y: 0 },
-  [DIRECTIONS.WEST]: { x: -1, y: 0 },
+  NORTH: { x: 0, y: -1 },
+  SOUTH: { x: 0, y: 1 },
+  EAST: { x: 1, y: 0 },
+  WEST: { x: -1, y: 0 },
 })
 
 export function add(coordinateA, coordinateB) {
@@ -72,18 +65,18 @@ export function getNewDirectionFromEventKey(key) {
     case "ArrowUp":
     case "w":
     case ",":
-      return DIRECTIONS.NORTH
+      return "NORTH"
     case "ArrowDown":
     case "s":
     case "o":
-      return DIRECTIONS.SOUTH
+      return "SOUTH"
     case "ArrowLeft":
     case "a":
-      return DIRECTIONS.WEST
+      return "WEST"
     case "ArrowRight":
     case "d":
     case "e":
-      return DIRECTIONS.EAST
+      return "EAST"
     default:
       return null
   }

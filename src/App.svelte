@@ -5,7 +5,6 @@
   import Board from "./Board.svelte"
   import GameOverModal from "./GameOverModal.svelte"
   import {
-    DIRECTIONS,
     DIRECTION_VECTORS,
     getNewApplePosition,
     getNewDirectionFromEventKey,
@@ -39,7 +38,7 @@
     ]
     apple = getNewApplePosition(BOARD_DIMENSIONS, initialSnake)
     gameState = GAME_STATES.START_SCREEN
-    headDirection = DIRECTIONS.SOUTH
+    headDirection = "SOUTH"
     score = 0
     snake = initialSnake
     willGrow = false
