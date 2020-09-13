@@ -8,8 +8,9 @@
 
   // Styling
   function calculatePositionAsStyle(coordinate) {
-    return `left: ${coordinate.x * CELL_SIZE}px; top: ${coordinate.y *
-      CELL_SIZE}px`
+    return `left: ${coordinate.x * CELL_SIZE}px; top: ${
+      coordinate.y * CELL_SIZE
+    }px`
   }
 
   let styleVars
@@ -89,7 +90,6 @@
   use:cssVars={styleVars}
   class="board"
   style="width: {boardDimensions.x * CELL_SIZE}px; height: {boardDimensions.y * CELL_SIZE}px">
-
   {#each snake.slice(1) as bodyPart}
     <div class="body-part" style={calculatePositionAsStyle(bodyPart)} />
   {/each}

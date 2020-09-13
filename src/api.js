@@ -1,5 +1,5 @@
 export function fetchScores() {
-  return fetch("/api/scores").then(res => {
+  return fetch("/api/scores").then((res) => {
     if (!res.ok) {
       throw Error(res.statusText)
     }
@@ -8,7 +8,7 @@ export function fetchScores() {
 }
 
 export function postScore(body) {
-  return fetch("/api/scores", { method: "POST", body }).then(res => {
+  return fetch("/api/scores", { method: "POST", body }).then((res) => {
     if (!res.ok) {
       throw Error(res.statusText)
     }

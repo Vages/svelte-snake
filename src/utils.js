@@ -22,7 +22,7 @@ export function isInsideBoard(boardDimensions, coordinate) {
   )
 }
 
-export function getNextSnake(snake, direction, shouldGrow) {
+export function getNextSnake(snake, direction, shouldGrow = false) {
   const headCoordinate = snake[0]
   const nextHead = add(headCoordinate, direction)
   const withAddedHead = [nextHead, ...snake]
@@ -32,13 +32,13 @@ export function getNextSnake(snake, direction, shouldGrow) {
     : withAddedHead.slice(0, withAddedHead.length - 1)
 }
 
-export function getNewApplePosition(boardDimensions, snakeCoordinates) {
-  const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap(x =>
-    [...Array(boardDimensions.y).keys()].map(y => ({ x, y })),
+export function getNewApplePosition(boardDimensions, snake) {
+  const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap((x) =>
+    [...Array(boardDimensions.y).keys()].map((y) => ({ x, y })),
   )
   const openSpaces = boardSpaces.filter(
-    boardSpace =>
-      !snakeCoordinates.some(snakeSpace => isEqual(snakeSpace, boardSpace)),
+    (boardSpace) =>
+      !snake.some((snakeSpace) => isEqual(snakeSpace, boardSpace)),
   )
 
   return openSpaces[Math.floor(Math.random() * openSpaces.length)]
@@ -46,7 +46,7 @@ export function getNewApplePosition(boardDimensions, snakeCoordinates) {
 
 export function isSnakeEatingItself(snake) {
   const headPosition = snake[0]
-  return snake.slice(1).some(snakeSpace => isEqual(snakeSpace, headPosition))
+  return snake.slice(1).some((snakeSpace) => isEqual(snakeSpace, headPosition))
 }
 
 export function is180Turn(snake, newDirectionFromEventKey) {

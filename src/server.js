@@ -1,7 +1,7 @@
 import { Server, Model } from "miragejs"
 import { addCaos } from "miragejs-caos"
 
-const ServerWithCaos =  addCaos(Server, { level: "medium" })
+const ServerWithCaos = addCaos(Server, { level: "medium" })
 export function makeServer({ environment = "development" } = {}) {
   return new ServerWithCaos({
     environment,
@@ -18,7 +18,7 @@ export function makeServer({ environment = "development" } = {}) {
     routes() {
       this.namespace = "api"
 
-      this.get("/scores", schema => {
+      this.get("/scores", (schema) => {
         return schema.scores.all().sort((a, b) => b.score - a.score)
       })
 

@@ -174,17 +174,12 @@
     tickTime={TICK_TIME} />
   <div class="signature">
     <p>
-      Made with
-      <a href="https://svelte.dev/">
-        <img alt="Svelte logo" src="/svelte.png" />
-        Svelte
-      </a>
-      by
-      <a href="https://github.com/vages">Eirik Vågeskar</a>
+      Made with <a href="https://svelte.dev/">
+        <img alt="Svelte logo" src="/svelte.png" /> Svelte
+      </a> by <a href="https://github.com/vages">Eirik Vågeskar</a>
     </p>
     <p>
-      Find
-      <a href="https://github.com/Vages/svelte-snake">the code on Github</a>
+      Find <a href="https://github.com/Vages/svelte-snake">the code on Github</a>
     </p>
   </div>
 </div>

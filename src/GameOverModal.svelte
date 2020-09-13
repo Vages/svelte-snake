@@ -7,7 +7,7 @@
 
   let getPromise
   function fetchScores() {
-    getPromise = api.fetchScores().then(j => j.scores)
+    getPromise = api.fetchScores().then((j) => j.scores)
   }
 
   onMount(fetchScores)
@@ -61,13 +61,7 @@
       <form on:submit={postScore}>
         <div>
           <label class="nes-field">
-            Name
-            <input
-              minlength="3"
-              required
-              type="text"
-              class="nes-input"
-              bind:value={name} />
+            Name <input minlength="3" required type="text" class="nes-input" bind:value={name} />
           </label>
         </div>
         <button type="submit" class="nes-btn is-primary">Submit</button>

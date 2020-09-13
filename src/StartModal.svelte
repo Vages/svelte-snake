@@ -22,7 +22,5 @@
     <p>WASD and arrow keys change direction</p>
     <p>Space pauses</p>
   </div>
-  <p>
-    <strong>Any key to start</strong>
-  </p>
+  <p><strong>Any key to start</strong></p>
 </NesContainer>
