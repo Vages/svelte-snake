@@ -5,16 +5,17 @@
 
   export let score
 
-  let getPromise
-  function fetchScores() {
-    getPromise = api.fetchScores().then((j) => j.scores)
+  let getPromise = api.fetchScores()
+
+  const fetchScores = () => {
+    getPromise = api.fetchScores()
   }
 
   onMount(fetchScores)
 
   let name = ""
   let postPromise
-  function postScore(e) {
+  const postScore = (e) => {
     e.preventDefault()
     postPromise = api.postScore({ name, score }).then(() => fetchScores())
   }
@@ -41,7 +42,7 @@
         style="width: max-content; margin-left: auto; margin-right: auto;">
         <table class="nes-table is-bordered is-centered">
           <tbody>
-            {#each highScores || [] as entry}
+            {#each highScores as entry}
               <tr>
                 <td>{entry.name}</td>
                 <td>{entry.score}</td>

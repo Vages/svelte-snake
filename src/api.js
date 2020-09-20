@@ -1,17 +1,21 @@
-export function fetchScores() {
-  return fetch("/api/scores").then((res) => {
-    if (!res.ok) {
-      throw Error(res.statusText)
-    }
-    return res.json()
-  })
+export async function fetchScores() {
+  const res = await fetch("/api/scores")
+  const json = await res.json()
+
+  if (res.ok) {
+    return json.scores
+  } else {
+    throw Error(res.statusText)
+  }
 }
 
-export function postScore(body) {
-  return fetch("/api/scores", { method: "POST", body }).then((res) => {
-    if (!res.ok) {
-      throw Error(res.statusText)
-    }
-    return res.json()
-  })
+export async function postScore(body) {
+  const res = await fetch("/api/scores", { method: "POST", body })
+  const json = await res.json()
+
+  if (res.ok) {
+    return json.scores
+  } else {
+    throw Error(res.statusText)
+  }
 }
