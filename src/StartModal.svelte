@@ -1,5 +1,5 @@
 <script>
-  import NesContainer from "./NesContainer.svelte"
+  import NesContainer from "./NesContainer.svelte";
 </script>
 
 <style>

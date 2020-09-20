@@ -22,4 +22,4 @@ module.exports = {
     "no-use-before-define": ["error", "nofunc"],
     "import/prefer-default-export": "off",
   },
-}
+};

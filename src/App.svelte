@@ -1,9 +1,9 @@
 <script>
-  import { onDestroy } from "svelte"
-  import { fly, scale } from "svelte/transition"
-  import cssVars from "svelte-css-vars"
+  import { onDestroy } from "svelte";
+  import { fly, scale } from "svelte/transition";
+  import cssVars from "svelte-css-vars";
 
-  import GameOverModal from "./GameOverModal.svelte"
+  import GameOverModal from "./GameOverModal.svelte";
   import {
     DIRECTION_VECTORS,
     getNewApplePosition,
@@ -13,138 +13,138 @@
     isEqual,
     isInsideBoard,
     isSnakeEatingItself,
-  } from "./utils"
-  import NesContainer from "./NesContainer.svelte"
-  import StartModal from "./StartModal.svelte"
+  } from "./utils";
+  import NesContainer from "./NesContainer.svelte";
+  import StartModal from "./StartModal.svelte";
 
-  const TICK_TIME = 100
-  const BOARD_DIMENSIONS = { x: 20, y: 20 }
+  const TICK_TIME = 100;
+  const BOARD_DIMENSIONS = { x: 20, y: 20 };
 
   const GAME_STATES = Object.freeze({
     START_SCREEN: "START_SCREEN",
     PLAYING: "PLAYING",
     PAUSED: "PAUSED",
     GAME_OVER: "GAME_OVER",
-  })
+  });
 
   // Letting the state variables go uninitialized is safe,
   // because they are initialized by resetGame before they are ever read
-  let apple
-  let gameState
-  let headDirection
-  let score
-  let snake
-  let willGrow
+  let apple;
+  let gameState;
+  let headDirection;
+  let score;
+  let snake;
+  let willGrow;
   function resetGame() {
     const initialSnake = [
       { x: 4, y: 4 },
       { x: 4, y: 3 },
       { x: 4, y: 2 },
-    ]
-    apple = getNewApplePosition(BOARD_DIMENSIONS, initialSnake)
-    gameState = GAME_STATES.START_SCREEN
-    headDirection = "SOUTH"
-    score = 0
-    snake = initialSnake
-    willGrow = false
+    ];
+    apple = getNewApplePosition(BOARD_DIMENSIONS, initialSnake);
+    gameState = GAME_STATES.START_SCREEN;
+    headDirection = "SOUTH";
+    score = 0;
+    snake = initialSnake;
+    willGrow = false;
   }
-  resetGame()
+  resetGame();
 
   // Snake logic
   function moveSnake() {
-    snake = getNextSnake(snake, DIRECTION_VECTORS[headDirection], willGrow)
-    willGrow = false
+    snake = getNextSnake(snake, DIRECTION_VECTORS[headDirection], willGrow);
+    willGrow = false;
   }
 
   $: if (
     !isInsideBoard(BOARD_DIMENSIONS, snake[0]) ||
     isSnakeEatingItself(snake)
   ) {
-    gameState = GAME_STATES.GAME_OVER
+    gameState = GAME_STATES.GAME_OVER;
   }
 
   // Apple logic
   $: if (isEqual(snake[0], apple)) {
-    eatApple()
+    eatApple();
   }
 
   function eatApple() {
-    score += 1
-    willGrow = true
-    apple = getNewApplePosition(BOARD_DIMENSIONS, snake)
+    score += 1;
+    willGrow = true;
+    apple = getNewApplePosition(BOARD_DIMENSIONS, snake);
   }
 
   // User interaction
   function handleKeydown(event) {
     if (gameState === GAME_STATES.START_SCREEN) {
-      gameState = GAME_STATES.PLAYING
-      return
+      gameState = GAME_STATES.PLAYING;
+      return;
     }
     if (gameState === GAME_STATES.PAUSED) {
       if (event.key === " ") {
-        gameState = GAME_STATES.PLAYING
+        gameState = GAME_STATES.PLAYING;
       }
-      return
+      return;
     }
     if (gameState === GAME_STATES.PLAYING) {
       if (event.key === " ") {
-        gameState = GAME_STATES.PAUSED
+        gameState = GAME_STATES.PAUSED;
       }
-      const keyDirection = getNewDirectionFromEventKey(event.key)
+      const keyDirection = getNewDirectionFromEventKey(event.key);
       if (!keyDirection) {
-        return
+        return;
       }
 
       if (!is180Turn(snake, keyDirection)) {
-        headDirection = keyDirection
+        headDirection = keyDirection;
       }
     }
   }
 
   // Starting and stopping gameplay
-  let stopTicking = () => {}
+  let stopTicking = () => {};
   const startTicking = () => {
-    const id = setInterval(moveSnake, TICK_TIME)
-    stopTicking = () => clearInterval(id)
-    return () => clearInterval(id)
-  }
+    const id = setInterval(moveSnake, TICK_TIME);
+    stopTicking = () => clearInterval(id);
+    return () => clearInterval(id);
+  };
 
   // Reacting to changed states
-  $: handleStateChange(gameState)
+  $: handleStateChange(gameState);
   // Extracting it as a separate function to avoid it being called when variables other than gameState
   // are reassigned, namely stopTicking, which is reassigned on startTicking
   function handleStateChange(newState) {
     if (newState === GAME_STATES.START_SCREEN) {
-      resetGame()
+      resetGame();
     } else if (newState === GAME_STATES.PLAYING) {
-      startTicking()
+      startTicking();
     } else if (newState === GAME_STATES.PAUSED) {
-      stopTicking()
+      stopTicking();
     } else if (newState === GAME_STATES.GAME_OVER) {
-      stopTicking()
+      stopTicking();
     }
   }
 
   // Stop calling functions in intervals when the functions stop existing (i.e. when the component unmounts)
-  onDestroy(stopTicking)
+  onDestroy(stopTicking);
 
-  const CELL_SIZE = 25
+  const CELL_SIZE = 25;
 
   // Styling
   function calculatePositionAsStyle(coordinate) {
     return `left: ${coordinate.x * CELL_SIZE}px; top: ${
       coordinate.y * CELL_SIZE
-    }px`
+    }px`;
   }
 
-  let styleVars
+  let styleVars;
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
     "tick-time": `${TICK_TIME}ms`,
-  }
+  };
 
-  let gameOver
-  $: gameOver = gameState === GAME_STATES.GAME_OVER
+  let gameOver;
+  $: gameOver = gameState === GAME_STATES.GAME_OVER;
 </script>
 
 <style>
@@ -321,7 +321,7 @@
     <div style="position: relative; left: -50%;">
       <GameOverModal
         on:close_modal={() => {
-          gameState = GAME_STATES.START_SCREEN
+          gameState = GAME_STATES.START_SCREEN;
         }}
         {score} />
     </div>

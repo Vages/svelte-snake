@@ -1,10 +1,10 @@
-import App from "./App.svelte"
-import { makeServer } from "./server"
+import App from "./App.svelte";
+import { makeServer } from "./server";
 
-makeServer()
+makeServer();
 
 const app = new App({
   target: document.body,
-})
+});
 
-export default app
+export default app;

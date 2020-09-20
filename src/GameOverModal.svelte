@@ -1,26 +1,26 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte"
-  import * as api from "./api"
-  import NesContainer from "./NesContainer.svelte"
+  import { createEventDispatcher, onMount } from "svelte";
+  import * as api from "./api";
+  import NesContainer from "./NesContainer.svelte";
 
-  export let score
+  export let score;
 
-  let getPromise = api.fetchScores()
+  let getPromise = api.fetchScores();
 
   const fetchScores = () => {
-    getPromise = api.fetchScores()
-  }
+    getPromise = api.fetchScores();
+  };
 
-  onMount(fetchScores)
+  onMount(fetchScores);
 
-  let name = ""
-  let postPromise
+  let name = "";
+  let postPromise;
   const postScore = (e) => {
-    e.preventDefault()
-    postPromise = api.postScore({ name, score }).then(() => fetchScores())
-  }
+    e.preventDefault();
+    postPromise = api.postScore({ name, score }).then(() => fetchScores());
+  };
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher();
 </script>
 
 <style>

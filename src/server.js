@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Server, Model } from "miragejs"
-import { addCaos } from "miragejs-caos"
+import { Server, Model } from "miragejs";
+import { addCaos } from "miragejs-caos";
 
-const ServerWithCaos = addCaos(Server, { level: "medium" })
+const ServerWithCaos = addCaos(Server, { level: "medium" });
 export function makeServer({ environment = "development" } = {}) {
   return new ServerWithCaos({
     environment,
@@ -12,20 +12,20 @@ export function makeServer({ environment = "development" } = {}) {
     },
 
     seeds(server) {
-      server.create("score", { name: "Alice", score: 10 })
-      server.create("score", { name: "Bob", score: 42 })
+      server.create("score", { name: "Alice", score: 10 });
+      server.create("score", { name: "Bob", score: 42 });
     },
 
     routes() {
-      this.namespace = "api"
+      this.namespace = "api";
 
       this.get("/scores", (schema) => {
-        return schema.scores.all().sort((a, b) => b.score - a.score)
-      })
+        return schema.scores.all().sort((a, b) => b.score - a.score);
+      });
 
       this.post("/scores", (schema, request) => {
-        schema.scores.create(request.requestBody)
-      })
+        schema.scores.create(request.requestBody);
+      });
     },
-  })
+  });
 }
