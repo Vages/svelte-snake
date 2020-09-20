@@ -34,11 +34,10 @@ export function getNextSnake(snake, direction, shouldGrow = false) {
 
 export function getNewApplePosition(boardDimensions, snake) {
   const boardSpaces = [...Array(boardDimensions.x).keys()].flatMap((x) =>
-    [...Array(boardDimensions.y).keys()].map((y) => ({ x, y })),
+    [...Array(boardDimensions.y).keys()].map((y) => ({ x, y }))
   );
   const openSpaces = boardSpaces.filter(
-    (boardSpace) =>
-      !snake.some((snakeSpace) => isEqual(snakeSpace, boardSpace)),
+    (boardSpace) => !snake.some((snakeSpace) => isEqual(snakeSpace, boardSpace))
   );
 
   return openSpaces[Math.floor(Math.random() * openSpaces.length)];
@@ -54,7 +53,7 @@ export function is180Turn(snake, newDirectionFromEventKey) {
   const neck = snake[1];
   const headWouldEatNeck = isEqual(
     add(head, DIRECTION_VECTORS[newDirectionFromEventKey]),
-    neck,
+    neck
   );
   return headWouldEatNeck;
 }
