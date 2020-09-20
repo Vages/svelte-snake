@@ -29,7 +29,12 @@
 
   // Letting the state variables go uninitialized is safe,
   // because they are initialized by resetGame before they are ever read
-  let apple, gameState, headDirection, score, snake, willGrow
+  let apple
+  let gameState
+  let headDirection
+  let score
+  let snake
+  let willGrow
   function resetGame() {
     const initialSnake = [
       { x: 4, y: 4 },
@@ -315,7 +320,9 @@
     <!-- This div, together with the class modal-container is required to center the content -->
     <div style="position: relative; left: -50%;">
       <GameOverModal
-        on:close_modal={() => (gameState = GAME_STATES.START_SCREEN)}
+        on:close_modal={() => {
+          gameState = GAME_STATES.START_SCREEN
+        }}
         {score} />
     </div>
   </div>

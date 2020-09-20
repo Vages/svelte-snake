@@ -3,10 +3,6 @@
 </script>
 
 <style>
-  h2 {
-    font-size: 1.25rem;
-  }
-
   div {
     margin: 3rem 0;
   }

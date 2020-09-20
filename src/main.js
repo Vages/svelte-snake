@@ -3,7 +3,7 @@ import { makeServer } from "./server"
 
 makeServer()
 
-var app = new App({
+const app = new App({
   target: document.body,
 })
 

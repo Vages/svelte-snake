@@ -4,9 +4,8 @@ export async function fetchScores() {
 
   if (res.ok) {
     return json.scores
-  } else {
-    throw Error(res.statusText)
   }
+  throw Error(res.statusText)
 }
 
 export async function postScore(body) {
@@ -15,7 +14,6 @@ export async function postScore(body) {
 
   if (res.ok) {
     return json.scores
-  } else {
-    throw Error(res.statusText)
   }
+  throw Error(res.statusText)
 }
