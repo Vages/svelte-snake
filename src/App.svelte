@@ -137,13 +137,11 @@
     }px`;
   }
 
-  let styleVars;
   $: styleVars = {
     "cell-size": `${CELL_SIZE}px`,
     "tick-time": `${TICK_TIME}ms`,
   };
 
-  let gameOver;
   $: gameOver = gameState === GAME_STATES.GAME_OVER;
 </script>
 
